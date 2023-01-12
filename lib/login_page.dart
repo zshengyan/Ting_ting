@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:ting/forget_psw_page.dart';
+import 'package:ting/main_page.dart';
 import 'package:ting/register_page.dart';
 import 'package:get/get.dart';
 
@@ -209,7 +210,7 @@ class _LoginPageState extends State<LoginPage> {
                             fontSize: 15,
                             color: Colors.white
                         ),
-                        recognizer: TapGestureRecognizer()..onTap=()=>Get.to(()=>const ForgetpawPage()),
+                        recognizer: TapGestureRecognizer()..onTap =()=>Get.to(()=>const ForgetpawPage()),
                         children: [
                           const TextSpan(
                             text: "                                    ",
@@ -244,7 +245,10 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                               TextButton(
-                                onPressed: (){},
+                                onPressed: () =>
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                      return const MainPage();
+                                    })),
                                 style: TextButton.styleFrom(
                                   padding: const EdgeInsets.fromLTRB(35, 7, 36, 8),
                                   foregroundColor: Colors.black,
