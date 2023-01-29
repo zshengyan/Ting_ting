@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ting/listen_friends_page.dart';
+import 'FriendColumn.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -28,7 +29,10 @@ class _MainPageState extends State<MainPage> {
                 iconSize: 40,
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
-                onPressed: () {  },
+                onPressed:() =>
+                    Navigator.push(context, MaterialPageRoute(builder: (context) {
+                      return const FriendColumn();
+                    })),
               ),
               IconButton(
                 padding: const EdgeInsets.fromLTRB(0, 40, 28, 0),
