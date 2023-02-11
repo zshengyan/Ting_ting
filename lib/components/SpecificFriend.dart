@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ting/SearchFriend.dart';
+import 'package:ting/components/SearchFriend.dart';
 
 var visibility = false;
 

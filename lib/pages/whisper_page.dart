@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:ting/main_page.dart';
-import 'package:ting/whisper_page.dart';
+import 'package:ting/pages/listen_friends_page.dart';
+import 'package:ting/pages/main_page.dart';
 
-class ListenPage extends StatefulWidget {
-  const ListenPage({Key? key}) : super(key: key);
+class WhisperPage extends StatefulWidget {
+  const WhisperPage({Key? key}) : super(key: key);
 
   @override
-  State<ListenPage> createState() => _ListenPageState();
+  State<WhisperPage> createState() => _WhisperPageState();
 }
 
-class _ListenPageState extends State<ListenPage> {
+class _WhisperPageState extends State<WhisperPage> {
   @override
   Widget build(BuildContext context) {
     double w =MediaQuery.of(context).size.width;
@@ -23,27 +23,26 @@ class _ListenPageState extends State<ListenPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               GestureDetector(
-                onTap: (){ },
+                onTap: () =>
+                    Navigator.push(context, MaterialPageRoute(builder: (context) {
+                      return const ListenPage();
+                    })),
                 child: Container(
-                  width: 55,
-                  height: 40,
-                  margin: const EdgeInsets.fromLTRB(54, 40, 0, 0),
-                  padding: const EdgeInsets.only(bottom: 5),
-                  decoration: const BoxDecoration(
-                    border: Border(bottom: BorderSide(color: Color(0xFFFFE57F),width: 2.0)),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Text(
-                        "朋友",
-                        style: TextStyle(
-                            fontSize: 24,
-                            color: Color(0xFFFFE57F)
+                    width: 55,
+                    height: 35,
+                    margin: const EdgeInsets.fromLTRB(54, 40, 0, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Text(
+                          "朋友",
+                          style: TextStyle(
+                              fontSize: 24,
+                              color: Colors.grey
+                          ),
                         ),
-                      ),
-                    ],
-                  )
+                      ],
+                    )
                 ),
               ),
               GestureDetector(
@@ -61,14 +60,15 @@ class _ListenPageState extends State<ListenPage> {
                 ),
               ),
               GestureDetector(
-                onTap: () =>
-                    Navigator.push(context, MaterialPageRoute(builder: (context) {
-                      return const WhisperPage();
-                    })),
+                onTap: (){ },
                 child: Container(
                     width: 80,
-                    height: 35,
+                    height: 40,
                     margin: const EdgeInsets.fromLTRB(0, 40, 50, 0),
+                    padding: const EdgeInsets.only(bottom: 5),
+                    decoration: const BoxDecoration(
+                      border: Border(bottom: BorderSide(color: Color(0xFFFFE57F),width: 2.0)),
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: const [
@@ -76,7 +76,7 @@ class _ListenPageState extends State<ListenPage> {
                           "悄悄话",
                           style: TextStyle(
                               fontSize: 24,
-                              color: Colors.grey
+                              color: Color(0xFFFFE57F)
                           ),
                         ),
                       ],
@@ -126,21 +126,21 @@ class _ListenPageState extends State<ListenPage> {
                 ),
               ),
               RichText(text: const TextSpan(
-                text: "标题",
-                style: TextStyle(
-                  fontSize: 24,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-                children: [
-                 TextSpan(
-                   text: "  19分钟前",
-                   style: TextStyle(
-                     fontSize: 11,
-                     color: Colors.white38
-                   )
-                 )
-                ]
+                  text: "标题",
+                  style: TextStyle(
+                    fontSize: 24,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  children: [
+                    TextSpan(
+                        text: "  19分钟前",
+                        style: TextStyle(
+                            fontSize: 11,
+                            color: Colors.white38
+                        )
+                    )
+                  ]
               )),
               SizedBox(
                 height: 50,
@@ -148,8 +148,8 @@ class _ListenPageState extends State<ListenPage> {
                 child: const Text(
                   "描述...",
                   style: TextStyle(
-                    fontSize: 19,
-                    color: Colors.grey
+                      fontSize: 19,
+                      color: Colors.grey
                   ),
                 ),
               ),
@@ -175,71 +175,47 @@ class _ListenPageState extends State<ListenPage> {
                       child: Image(image: AssetImage("img/pause.png",),),
                     ),
                   ),
-                  Container(
-                    width: 40,
-                    height: 40,
-                    margin: const EdgeInsets.only(right: 30),
-                    child: const Image(image: AssetImage("img/replay2.png",),),
+                  GestureDetector(
+                    onTap: () { },
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      margin: const EdgeInsets.only(right: 30),
+                      child: const Image(image: AssetImage("img/replay2.png",),),
+                    ),
                   )
                 ],
-              ),
-              Container(
-                width: w*0.86,
-                height: 37,
-                margin: const EdgeInsets.only(bottom: 12),
-                decoration: const BoxDecoration(
-                  border: Border(bottom: BorderSide(color: Color(0xFFFFE57F),width: 1.0)),
-                ),
-              ),
-              SizedBox(
-                width: w*0.82,
-                height: 35,
-                child: Row(
-                  children: [
-                    const Image(image: AssetImage("img/likes.png",),),
-                    Container(
-                      width: 35,
-                      height: 35,
-                      margin: const EdgeInsets.fromLTRB(16, 0, 0, 0),
-                      decoration: const BoxDecoration(
-                        color: Colors.white70,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(17.5),
-                        ),
-                      ),
-                      child: const Image(image: AssetImage("img/user.png",),),
-                    ),
-                    Container(
-                      width: 35,
-                      height: 35,
-                      margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      decoration: const BoxDecoration(
-                        color: Colors.white70,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(17.5),
-                        ),
-                      ),
-                      child: const Image(image: AssetImage("img/user.png",),),
-                    ),
-                    Container(
-                      width: 35,
-                      height: 35,
-                      margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      decoration: const BoxDecoration(
-                        color: Colors.white70,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(17.5),
-                        ),
-                      ),
-                      child: const Image(image: AssetImage("img/user.png",),),
-                    ),
-                  ],
-                ),
               ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  SizedBox(height: h*0.26,),
+                  SizedBox(height: h*0.1757,),
+                  GestureDetector(
+                    onTap: () { },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 95,
+                          height: 95,
+                          margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          alignment: Alignment.center,
+                          decoration: const BoxDecoration(
+                              color: Color(0xFFFFE57F),
+                              borderRadius: BorderRadius.all(Radius.circular(47.5),),),
+                            child: const Text(
+                              "去回ta",
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: h*0.0715,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -250,8 +226,8 @@ class _ListenPageState extends State<ListenPage> {
                           height: 70,
                           margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                           decoration: const BoxDecoration(
-                            color: Colors.white38,
-                            borderRadius: BorderRadius.all(Radius.circular(15),),
+                              color: Colors.white38,
+                              borderRadius: BorderRadius.all(Radius.circular(15),),
                               image: DecorationImage(image: AssetImage("img/likes(1).png"),
                               )
                           ),
@@ -266,22 +242,7 @@ class _ListenPageState extends State<ListenPage> {
                           decoration: const BoxDecoration(
                               color: Colors.white38,
                               borderRadius: BorderRadius.all(Radius.circular(15),),
-                              image: DecorationImage(image: AssetImage("img/recommend.png"),
-                              )
-                          ),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () { },
-                        child: Container(
-                          width: 70,
-                          height: 70,
-                          margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                          decoration: const BoxDecoration(
-                              color: Colors.white38,
-                              borderRadius: BorderRadius.all(Radius.circular(15),),
-                              image: DecorationImage(image: AssetImage("img/collect.png"),
-                              )
+                              image: DecorationImage(image: AssetImage("img/collect.png"),)
                           ),
                         ),
                       ),

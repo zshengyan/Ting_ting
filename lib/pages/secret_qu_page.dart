@@ -1,16 +1,14 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:ting/secret_qu_page.dart';
+import 'package:ting/pages/register_page2.dart';
 
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({Key? key}) : super(key: key);
+class SecretquPage extends StatefulWidget {
+  const SecretquPage({Key? key}) : super(key: key);
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  State<SecretquPage> createState() => _SecretquPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _SecretquPageState extends State<SecretquPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,39 +16,40 @@ class _RegisterPageState extends State<RegisterPage> {
       body: SingleChildScrollView(
         reverse: true,
         child: SizedBox(
-          height: MediaQuery.of(context).size.height*0.95,
+          height: MediaQuery.of(context).size.height*0.85,
           child: Column(
             children: [
               Container(
-                width: 100,
-                height: 100,
-                margin: const EdgeInsets.fromLTRB(16, 124, 0, 0),
+                width: 230,
+                height: 30,
+                margin: const EdgeInsets.fromLTRB(0, 149, 80, 0),
                 decoration: const BoxDecoration(
                     image: DecorationImage(
                         image: AssetImage(
-                            "img/loginIcon.png"
+                            "img/secretqu_title.png"
                         ),
                         fit: BoxFit.fill
                     )
                 ),
               ),
-              Container(
-                width: 72,
-                height: 44,
-                margin: const EdgeInsets.fromLTRB(17, 14, 0, 0),
-                decoration: const BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage(
-                            "img/logintitle.png"
-                        ),
-                        fit: BoxFit.fill
-                    )
-                ),
+              const SizedBox(height: 10,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: const [
+                  SizedBox(width: 50),
+                  Text(
+                    "这将会在找回密码时使用噢！",
+                    style: TextStyle(
+                        fontSize: 13,
+                        color: Color(0xFFFFE57F)
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 14,),
+              const SizedBox(height: 20),
               Container(
-                margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                width: 30,
+                margin: const EdgeInsets.fromLTRB(0, 0, 220, 0),
+                width: 35,
                 height: 20,
                 decoration: const BoxDecoration(
                     border: Border(
@@ -69,7 +68,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     image: DecorationImage(
                         image: AssetImage(
-                            "img/triangle2.png"
+                            "img/triangle.png"
                         ),
                         fit: BoxFit.fill
                     )
@@ -78,31 +77,21 @@ class _RegisterPageState extends State<RegisterPage> {
               Container(
                 width: 380,
                 height: 468,
-                margin: const EdgeInsets.fromLTRB(22, 0, 20, 0),
+                margin: const EdgeInsets.fromLTRB(25, 0, 25, 0),
                 padding: const EdgeInsets.fromLTRB(24, 25, 30, 0),
-                decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                    color: Colors.white38,
-                    image: DecorationImage(
-                        image: AssetImage(
-                            "img/border.png"
-                        ),
-                        fit: BoxFit.fill
-                    )
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(15.0)),
+                  color: Colors.white38,
+                  border: Border.all(
+                      color: const Color(0xFFFFE57F),
+                      width: 4.0
+                  ),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      "Welcome!",
-                      style: TextStyle(
-                          fontSize: 35,
-                          color: Colors.yellowAccent
-                      ),
-                    ),
-                    const SizedBox(height: 20,),
-                    const Text(
-                      "设置账号",
+                      "问题",
                       style: TextStyle(
                           fontSize: 24,
                           color: Colors.white
@@ -141,7 +130,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 )
                             ),
                             floatingLabelBehavior: FloatingLabelBehavior.never,
-                            labelText: "  请输入账号",
+                            labelText: "  请输入你的问题",
                             labelStyle: TextStyle(
                               fontSize: 18,
                               color: Colors.black54,
@@ -152,7 +141,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     const SizedBox(height: 15,),
                     const Text(
-                      "设置密码",
+                      "答案",
                       style: TextStyle(
                           fontSize: 24,
                           color: Colors.white
@@ -175,7 +164,6 @@ class _RegisterPageState extends State<RegisterPage> {
                           ]
                       ),
                       child: const TextField(
-                        obscureText: true,
                         cursorColor: Colors.black54,
                         cursorHeight: 20,
                         decoration: InputDecoration(
@@ -192,7 +180,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 )
                             ),
                             floatingLabelBehavior: FloatingLabelBehavior.never,
-                            labelText: "  请输入密码",
+                            labelText: "  请输入你的答案",
                             labelStyle: TextStyle(
                               fontSize: 18,
                               color: Colors.black54,
@@ -201,11 +189,11 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 30,),
+                    const SizedBox(height: 60,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const SizedBox(width: 100,),
+                        const SizedBox(width: 90,),
                         Expanded(child: ClipRRect(
                           borderRadius: BorderRadius.circular(21),
                           child: Stack(
@@ -220,17 +208,17 @@ class _RegisterPageState extends State<RegisterPage> {
                               TextButton(
                                 onPressed: () =>
                                     Navigator.push(context, MaterialPageRoute(builder: (context) {
-                                      return const SecretquPage();
+                                      return const RegisterPage2();
                                     })),
                                 style: TextButton.styleFrom(
-                                  padding: const EdgeInsets.fromLTRB(35, 7, 36, 8),
+                                  padding: const EdgeInsets.fromLTRB(33, 7, 32, 8),
                                   foregroundColor: Colors.black,
                                   textStyle: const TextStyle(
                                     fontSize: 22,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                child: const Text('注册'),
+                                child: const Text('完成'),
                               ),
                             ],
                           ),
@@ -239,26 +227,6 @@ class _RegisterPageState extends State<RegisterPage> {
                         const SizedBox(width: 100,),
                       ],
                     ),
-                    const SizedBox(height: 10,),
-                    RichText(
-                      textAlign: TextAlign.end,
-                      text: TextSpan(
-                          text: "                               ",
-                          style: const TextStyle(
-                            fontSize: 15,
-                          ),
-                          children: [
-                            TextSpan(
-                              text: "已拥有账号？",
-                              style: const TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.white
-                              ),
-                              recognizer: TapGestureRecognizer()..onTap=()=>Get.back(),
-                            )
-                          ]
-                      ),
-                    )
                   ],
                 ),
               ),

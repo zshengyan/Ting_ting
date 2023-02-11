@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ting/SearchFriend.dart';
-import 'package:ting/main_page.dart';
+import 'package:ting/components/SearchFriend.dart';
+import 'package:ting/pages/main_page.dart';
 import 'FriendRequest.dart';
 
 class FriendColumn extends StatefulWidget {

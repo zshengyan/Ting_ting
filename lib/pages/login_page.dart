@@ -1,8 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:ting/forget_psw_page.dart';
-import 'package:ting/main_page.dart';
-import 'package:ting/register_page.dart';
+import 'package:ting/pages/forget_psw_page.dart';
+import 'package:ting/pages/main_page.dart';
+import 'package:ting/pages/register_page.dart';
 import 'package:get/get.dart';
 
 class LoginPage extends StatefulWidget {

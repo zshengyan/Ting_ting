@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ting/main_page.dart';
+import 'package:ting/pages/main_page.dart';
 
 var visibility = false;
 

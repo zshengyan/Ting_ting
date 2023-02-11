@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ting/listen_friends_page.dart';
-import 'FriendColumn.dart';
+import 'package:ting/pages/listen_friends_page.dart';
+import '../components/FriendColumn.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
