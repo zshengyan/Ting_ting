@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:ting/pages/forget_psw_page.dart';
@@ -21,7 +23,10 @@ class _LoginPageState extends State<LoginPage> {
       body: SingleChildScrollView(
         reverse: true,
         child: SizedBox(
-          height: MediaQuery.of(context).size.height * 0.95,
+          height: MediaQuery
+              .of(context)
+              .size
+              .height * 0.95,
           child: Column(
             children: [
               Container(
@@ -84,14 +89,17 @@ class _LoginPageState extends State<LoginPage> {
                     const Text(
                       "Hello!",
                       style:
-                          TextStyle(fontSize: 35, color: Colors.yellowAccent),
+                      TextStyle(fontSize: 35, color: Colors.yellowAccent),
                     ),
                     const SizedBox(
                       height: 20,
                     ),
                     GestureDetector(
-                      onTap: () {
-                        AuthService.login("steven", "123456");
+                      onTap: () async {
+                        AuthService.getInfo("nickname",
+                            "eyJhbGciOiJIUzUxMiJ9.eyJuaWNrbmFtZSI6IjEyMyIsInBlcm1pc3Npb24iOjEsImlkIjoxLCJ1c2VybmFtZSI6InN0ZXZlbiIsImV4cCI6MTY3NjIxMjE2NX0.xXewAQv1o0cWIXmWOv8twMhuNWS22js7jXRohvLJbsvoU9Pk-B_thI9-SUDZoUdIhJupa3L5ZkjudO3q3D0G7A");
+                        // var result = await AuthService.getForgetQuestion(1);
+                        // print(result);
                       },
                       child: const Text(
                         "账号",
@@ -107,7 +115,7 @@ class _LoginPageState extends State<LoginPage> {
                       decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius:
-                              const BorderRadius.all(Radius.circular(30.0)),
+                          const BorderRadius.all(Radius.circular(30.0)),
                           boxShadow: [
                             BoxShadow(
                                 blurRadius: 10,
@@ -121,10 +129,10 @@ class _LoginPageState extends State<LoginPage> {
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.white),
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(30))),
+                                BorderRadius.all(Radius.circular(30))),
                             enabledBorder: OutlineInputBorder(
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(30)),
+                                BorderRadius.all(Radius.circular(30)),
                                 borderSide: BorderSide(
                                   color: Colors.white38,
                                 )),
@@ -153,7 +161,7 @@ class _LoginPageState extends State<LoginPage> {
                       decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius:
-                              const BorderRadius.all(Radius.circular(30.0)),
+                          const BorderRadius.all(Radius.circular(30.0)),
                           boxShadow: [
                             BoxShadow(
                                 blurRadius: 10,
@@ -168,10 +176,10 @@ class _LoginPageState extends State<LoginPage> {
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.white),
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(30))),
+                                BorderRadius.all(Radius.circular(30))),
                             enabledBorder: OutlineInputBorder(
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(30)),
+                                BorderRadius.all(Radius.circular(30)),
                                 borderSide: BorderSide(
                                   color: Colors.white38,
                                 )),
@@ -231,13 +239,14 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                 ),
                                 TextButton(
-                                  onPressed: () => Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
-                                    return const MainPage();
-                                  })),
+                                  onPressed: () =>
+                                      Navigator.push(context,
+                                          MaterialPageRoute(builder: (context) {
+                                            return const MainPage();
+                                          })),
                                   style: TextButton.styleFrom(
                                     padding:
-                                        const EdgeInsets.fromLTRB(35, 7, 36, 8),
+                                    const EdgeInsets.fromLTRB(35, 7, 36, 8),
                                     foregroundColor: Colors.black,
                                     textStyle: const TextStyle(
                                       fontSize: 22,
