@@ -1,29 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:ting/components/FriendColumn.dart';
-import 'package:dio/dio.dart';
-import 'dart:convert';
+import 'package:ting/components/Personal.dart';
 
-var visibility = false;
 
-class FriendInformation {
-  String username;
-  String nickname;
-  String token;
-
-  FriendInformation(this.username, this.nickname, this.token);
-
-  factory FriendInformation.fromJSON(Map<String, dynamic> json) =>
-      FriendInformation(json["username"], json["nickname"], json["token"]);
-}
-
-class SearchFriend extends StatefulWidget {
-  const SearchFriend({super.key});
+class ChangeNickname extends StatefulWidget {
+  const ChangeNickname({super.key});
   @override
-  State<SearchFriend> createState() => _SearchFriendState();
+  State<ChangeNickname> createState() => _ChangeNicknameState();
 }
 
-class _SearchFriendState extends State<SearchFriend> {
-  final formkey = GlobalKey<FormState>();
+class _ChangeNicknameState extends State<ChangeNickname> {
+
 
   @override
   Widget build(BuildContext context) {
@@ -46,42 +32,40 @@ class _SearchFriendState extends State<SearchFriend> {
                   decoration: const BoxDecoration(
                     color: Color(0xFF303030),
                     image: DecorationImage(
-                      image: AssetImage('img/arrowleft.png'),
+                      image: AssetImage('pictures/arrowleft.png'),
                       fit: BoxFit.fill,
                     ),
                   ),
                   child: MaterialButton(
                     onPressed: (){
-                      //回到主界面
+                      //回到个人界面Personal
                       Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const FriendColumn())
+                          MaterialPageRoute(builder: (context) => Personal())
                       );
                     },
                   ),
                 ),
               ],
             ),
-            const Align(
-              alignment: FractionalOffset(212/430, 69/932),
+            Container(
+              margin: const EdgeInsets.fromLTRB(70, 220, 0, 0),
               child: (
-                  Text('Ting',
+                  const Text('修改昵称',
                     style: TextStyle(
                       fontFamily: 'Inter',
-                      fontSize: 40,
+                      fontSize: 30,
                       fontWeight: FontWeight.w900,
-                      fontStyle: FontStyle.italic,
-                      color: Color(0xFFD2D2D2),
+                      fontStyle: FontStyle.normal,
+                      color: Color(0xFFFFFFFF),
                       height: 1.2,
                     ),
                   )
               ),
             ),
-            Row(
-              children: [
-                Container(
-                  margin: const EdgeInsets.fromLTRB(78, 55, 0, 0),
-                  width: 240,
+            Container(
+                  margin: const EdgeInsets.fromLTRB(70, 16, 0, 0),
+                  width: 290,
                   height: 50,
                   decoration: const BoxDecoration(
                     color: Color(0xFFF5F5F5),
@@ -105,7 +89,7 @@ class _SearchFriendState extends State<SearchFriend> {
                           )
                       ),
                       floatingLabelBehavior: FloatingLabelBehavior.never,
-                      labelText: "输入对方账号",
+                      labelText: "此处应为原本的昵称",
                       labelStyle: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w900,
@@ -116,52 +100,33 @@ class _SearchFriendState extends State<SearchFriend> {
                     ),
                   ),
                 ),
-                Container(
-                  height: 40,
-                  width: 40,
-                  margin: const EdgeInsets.fromLTRB(10, 56, 0, 0),
-                  decoration: const BoxDecoration(
+            Container(
+              height: 74,
+              width: 150,
+              margin: const EdgeInsets.fromLTRB(140, 120, 0, 0),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFEE8A),
+                borderRadius: BorderRadius.circular(20)
+              ),
+              child: TextButton(
+                child: const Text(
+                  '保存',
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.w900,
                     color: Color(0xFF303030),
-                    image: DecorationImage(
-                      image: AssetImage('img/search.png'),
-                      fit: BoxFit.fill,
-                    ),
+                    letterSpacing: 6,
                   ),
-                  child: MaterialButton(
-                    onPressed: (){
-                      //找到特定的朋友
-                      void getHttp() async {
-                        try {
-                          Response response = await Dio().get("");
-                          print(response);
-                        } catch (e) {
-                          print(e);
-                        }
-                      }
-                      IfAccountExist(){
-                        //若输入账号不存在，红色字体显现
+                ),
+                onPressed: (){
+                  //找到特定的朋友
+                  IfAccountExist(){
+                    //若输入账号不存在，红色字体显现
 
-                        visibility = true;
-                      }
-                    },
-                  ),
-                ),
-              ],
+                  }
+                },
+              ),
             ),
-            Visibility(
-                visible: visibility,
-                child: Container(
-                margin: const EdgeInsets.fromLTRB(154, 15, 0, 0),
-                child: const Text ('未找到该用户！',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.normal,
-                      color: Color(0xFFF94A4A),
-                      letterSpacing: 0.1,
-                    ),
-                  ),
-                ),
-            )
           ],
         ),
       ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ting/pages/main_page.dart';
+import 'package:ting/components/FriendColumn.dart';
 
-var visibility = false;
+List<String> litems = ['用户1','用户2','用户3','用户4','用户5','用户6','用户7','用户8','用户9','用户10'];
 
 class FriendRequest extends StatefulWidget {
   const FriendRequest({super.key});
@@ -38,10 +38,13 @@ class _FriendRequestState extends State<FriendRequest> {
                     ),
                   ),
                   child: MaterialButton(
-                    onPressed: () =>
-                        Navigator.push(context, MaterialPageRoute(builder: (context) {
-                          return const MainPage();
-                        })),
+                    onPressed: (){
+                      //回到FriendColumn
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => FriendColumn())
+                      );
+                    },
                   ),
                 ),
               ],
@@ -64,8 +67,8 @@ class _FriendRequestState extends State<FriendRequest> {
             Container(
               width: 120,
               height: 40,
-              margin: EdgeInsets.fromLTRB(30, 26, 0, 0),
-              child: Text('好友申请',
+              margin: const EdgeInsets.fromLTRB(30, 26, 0, 0),
+              child: const Text('好友申请',
                 style: TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 30,
@@ -74,7 +77,90 @@ class _FriendRequestState extends State<FriendRequest> {
                 ),
               ),
             ),
+            Container(
+              height: 506,
+              width: 374,
+              margin: const EdgeInsets.fromLTRB(28, 31, 28, 0),
+              decoration: const BoxDecoration(
+                  color: Color(0xFF303030)
+              ),
+              child: Expanded(
+                  child: ListView.builder(
+                      itemCount: litems.length,
+                      itemBuilder: (BuildContext ctxt, int Index) {
+                        return Column(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: const Color(0xFF3E3E3E),
+                              ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 70,
+                                    height: 70,
+                                    decoration: BoxDecoration(
+                                        color: const Color(0xFFD2D2D2),
+                                        borderRadius: BorderRadius.circular(35),
+                                        image: const DecorationImage(
+                                            scale: 2,
+                                            image: AssetImage('img/user big.png')
+                                        )
+                                    ),
+                                  ),
+                                  Container(
+                                    width: 23.75,
+                                  ),
+                                  Text(
+                                    litems[Index],
+                                    style: const TextStyle(
+                                      fontSize: 24,
+                                      color: Color(0xFFFFEE8A),
+                                    ),
+                                  ),
+                                  MaterialButton(
+                                    onPressed: (){
+                                      //同意添加好友
 
+                                    },
+                                    child: Container(
+                                      width: 78,
+                                      height: 40,
+                                      margin: const EdgeInsets.fromLTRB(0, 5, 0, 0),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                        color: const Color(0xFFFFEE8A),
+                                      ),
+                                      child: const Text(
+                                          '同意',
+                                          textAlign: TextAlign.center,
+                                          strutStyle: StrutStyle(
+                                            height: 2.5,
+                                            // 1.1更居中
+                                            forceStrutHeight: true, // 关键属性 强制改为文字高度
+                                          ),
+
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w700,
+                                              color: Color(0xFF303030)
+                                          )
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Container(
+                              height: 17,
+                            )
+                          ],
+                        );
+                      }
+                  )
+              ),
+            ),
           ],
         ),
       ),
