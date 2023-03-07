@@ -21,6 +21,8 @@ class AuthService {
     return response["token"];
   }
 
+
+
   static Future<String> getForgetQuestion(int id) async {
     var response = (await dio.get("/auth/forgetPassword/$id")).data;
     if (response["code"] != 10000) {
@@ -29,12 +31,16 @@ class AuthService {
     return response["data"]["question"];
   }
 
+  
+
   static Future<String> getInfo(String filed, String token) async {
     var response = (await dio.get(
       "/info/$filed",
-      options: Options(headers: {
-        "Authorization": "Bearer $token",
-      }),
+      options: Options(
+        headers: {
+          "Authorization": "Bearer $token",
+        },
+      ),
     ))
         .data;
     print(response);
