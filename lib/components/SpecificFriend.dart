@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ting/components/SearchFriend.dart';
 
 var visibility = false;
 
@@ -33,15 +32,15 @@ class _SpecificFriendState extends State<SpecificFriend> {
                   decoration: const BoxDecoration(
                     color: Color(0xFF303030),
                     image: DecorationImage(
-                      image: AssetImage('img/arrowleft.png'),
+                      image: AssetImage('pictures/arrowleft.png'),
                       fit: BoxFit.fill,
                     ),
                   ),
                   child: MaterialButton(
-                    onPressed: () =>
-                        Navigator.push(context, MaterialPageRoute(builder: (context) {
-                          return const SearchFriend();
-                        })),
+                    onPressed: (){
+                      //回到主界面
+
+                    },
                   ),
                 ),
               ],
@@ -70,7 +69,7 @@ class _SpecificFriendState extends State<SpecificFriend> {
               width: 150,
               margin: const EdgeInsets.fromLTRB(135, 102, 0, 0),
               child: const Image(
-              image: AssetImage('img/user big.png'),
+              image: AssetImage('pictures/user.png'),
               ),
             ),
             Container(
