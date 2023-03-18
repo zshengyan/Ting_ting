@@ -9,6 +9,10 @@ class RegisterPage extends StatefulWidget {
   @override
   State<RegisterPage> createState() => _RegisterPageState();
 }
+var _newUsername = TextEditingController();
+var newUser = _newUsername.text;
+var _newPassword = TextEditingController();
+var newPass = _newPassword.text;
 
 class _RegisterPageState extends State<RegisterPage> {
   @override
@@ -124,10 +128,14 @@ class _RegisterPageState extends State<RegisterPage> {
                             )
                           ]
                       ),
-                      child: const TextField(
+                      child: TextField(
+                        onChanged: (value) => {
+                          newUser = _newUsername.text
+                        },
+                        controller: _newUsername,
                         cursorColor: Colors.black54,
                         cursorHeight: 20,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                     color: Colors.white
@@ -174,11 +182,15 @@ class _RegisterPageState extends State<RegisterPage> {
                             )
                           ]
                       ),
-                      child: const TextField(
+                      child: TextField(
+                        onChanged: (value) => {
+                          newPass = _newPassword.text
+                        },
+                        controller: _newPassword,
                         obscureText: true,
                         cursorColor: Colors.black54,
                         cursorHeight: 20,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                     color: Colors.white

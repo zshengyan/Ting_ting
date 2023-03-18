@@ -8,6 +8,11 @@ class SecretquPage extends StatefulWidget {
   State<SecretquPage> createState() => _SecretquPageState();
 }
 
+var _securityQuestion = TextEditingController();
+var securityQuestion = _securityQuestion.text;
+var _securityAnswer = TextEditingController();
+var securityAnswer = _securityAnswer.text;
+
 class _SecretquPageState extends State<SecretquPage> {
   @override
   Widget build(BuildContext context) {
@@ -113,10 +118,14 @@ class _SecretquPageState extends State<SecretquPage> {
                             )
                           ]
                       ),
-                      child: const TextField(
+                      child: TextField(
+                        controller: _securityQuestion,
+                        onChanged: (value) => {
+                          securityQuestion= _securityQuestion.text
+                        },
                         cursorColor: Colors.black54,
                         cursorHeight: 20,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                     color: Colors.white
@@ -163,10 +172,14 @@ class _SecretquPageState extends State<SecretquPage> {
                             )
                           ]
                       ),
-                      child: const TextField(
+                      child: TextField(
+                        controller: _securityAnswer,
+                        onChanged: (value) => {
+                          securityAnswer = _securityAnswer.text
+                        },
                         cursorColor: Colors.black54,
                         cursorHeight: 20,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                     color: Colors.white

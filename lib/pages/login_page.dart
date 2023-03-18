@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:ting/pages/forget_psw_page.dart';
@@ -14,6 +12,10 @@ class LoginPage extends StatefulWidget {
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
+var _username = TextEditingController();
+var user = _username.text;
+var _password = TextEditingController();
+var pass = _password.text;
 
 class _LoginPageState extends State<LoginPage> {
   @override
@@ -122,10 +124,11 @@ class _LoginPageState extends State<LoginPage> {
                                 offset: const Offset(1, 1),
                                 color: Colors.white.withOpacity(0.6))
                           ]),
-                      child: const TextField(
+                      child: TextField(
+                        controller: _username,
                         cursorColor: Colors.black54,
                         cursorHeight: 20,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.white),
                                 borderRadius:
@@ -168,11 +171,12 @@ class _LoginPageState extends State<LoginPage> {
                                 offset: const Offset(1, 1),
                                 color: Colors.white.withOpacity(0.6))
                           ]),
-                      child: const TextField(
+                      child: TextField(
+                        controller: _password,
                         obscureText: true,
                         cursorColor: Colors.black54,
                         cursorHeight: 20,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.white),
                                 borderRadius:
