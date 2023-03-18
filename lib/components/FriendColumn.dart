@@ -2,9 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:ting/components/FriendRequest.dart';
 import 'package:ting/components/SearchFriend.dart';
 import 'package:ting/pages/main_page.dart';
+import 'package:ting/service/NetworkManager.dart';
+import 'package:ting/components/menu.dart';
+import 'package:ting/components/popmenu.dart';
 
 List<String> litems = ['用户1','用户2','用户3','用户4','用户5','用户6','用户7','用户8','用户9','用户10'];
 
+void function() {
+
+}
 
 class FriendColumn extends StatefulWidget {
   const FriendColumn({super.key});
@@ -15,9 +21,29 @@ class FriendColumn extends StatefulWidget {
 }
 
 class _FriendColumnState extends State<FriendColumn> {
-
   @override
   Widget build(BuildContext context) {
+    final List<Context> items = [];
+    items.add(
+      Context(
+        text: Image(image: AssetImage('img/option1.png')),
+        onTap: () {
+          //需要网络请求删除好友
+          print('删除好友');
+          Navigator.pop(context);
+        },
+      ),
+    );
+    items.add(
+      Context(
+        text: Image(image: AssetImage('img/option2.png')),
+        onTap: () {
+          //直接取消弹出菜单
+          Navigator.pop(context);
+        },
+      ),
+    );
+
     return Scaffold(
       backgroundColor: const Color(0xFF303030),
       resizeToAvoidBottomInset: false,
@@ -122,19 +148,18 @@ class _FriendColumnState extends State<FriendColumn> {
                 decoration: const BoxDecoration(
                   color: Color(0xFF303030)
                 ),
-                child: Expanded(
-                  child: ListView.builder(
+                child: Column(
+                  children: [
+                    Expanded(
+                        child: ListView.builder(
                             itemCount: litems.length,
                             itemBuilder: (BuildContext ctxt, int Index) {
-                              return OutlinedButton(
-                                style: ButtonStyle(
-                                  padding: MaterialStateProperty.all(
-                                      const EdgeInsets.symmetric(horizontal: 0, vertical: 0)),
-                                ),
-
-                                onPressed: (){
-                                  //进入好友基本简介页面
-
+                              return GestureDetector(
+                                  behavior: HitTestBehavior.opaque,
+                                  onLongPressStart: (details) async {
+                                    if (items.isNotEmpty) {
+                                      await Popmenu.showPopupMenu(context, details, items);
+                                    }
                                 },
                                 child: Column(
                                   children: [
@@ -153,7 +178,7 @@ class _FriendColumnState extends State<FriendColumn> {
                                                 borderRadius: BorderRadius.circular(35),
                                                 image: const DecorationImage(
                                                     scale: 2,
-                                                    image: AssetImage('img/user big.png')
+                                                    image: AssetImage('img/user big.png')  //网络请求
                                                 )
                                             ),
                                           ),
@@ -161,7 +186,7 @@ class _FriendColumnState extends State<FriendColumn> {
                                             width: 23.75,
                                           ),
                                           Text(
-                                            litems[Index],
+                                            litems[Index],      //网络请求
                                             style: const TextStyle(
                                               fontSize: 24,
                                               color: Color(0xFFFFEE8A),
@@ -178,7 +203,10 @@ class _FriendColumnState extends State<FriendColumn> {
                               );
                             }
                         )
-                      ),
+                    ),
+                  ],
+                )
+
                     ),   //滑动列表
               Container(
                 width: 370,
