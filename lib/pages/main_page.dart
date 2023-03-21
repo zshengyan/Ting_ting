@@ -18,7 +18,7 @@ class _MainPageState extends State<MainPage> {
       backgroundColor: Colors.white10,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
-        //mainAxisAlignment: MainAxisAlignment.start,
+        //mainAxisAlignment: MainAxissAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -46,7 +46,7 @@ class _MainPageState extends State<MainPage> {
           ),
           Container(
             width: w*0.86,
-            height: 80,
+            height: 19,
             decoration: const BoxDecoration(
               border: Border(bottom: BorderSide(color: Color(0xFFFFE57F),width: 1.0)),
             ),
@@ -168,7 +168,7 @@ class _MainPageState extends State<MainPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(width: w*0.32, height: 20, child: const Text("  "),),
+                    SizedBox(width: w*0.32, height: 20),
                     SizedBox(
                       width: w*0.5,
                       height: 30,

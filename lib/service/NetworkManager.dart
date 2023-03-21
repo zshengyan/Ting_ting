@@ -2,10 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ting/model/basic_user_info.dart';
 
-const String BASEURL = "http://twt.subit.org.cn";
-
 class HTTPConfig {
-  static const baseURL = BASEURL;
+  static const baseURL = "http://twt.subit.org.cn";
   static const timeout = 3000;
 }
 
@@ -28,9 +26,11 @@ class LYFHttpRequest {
     }
     return response["token"];
   }
+
   static Future<String?> getFriendList() async {
-    var response = (await dio.get("/friends/getFriendList",))
-        .data;
+    var response = (await dio.get(
+      "/friends/getFriendList",
+    )).data;
     if (response["code"] != 10000) {
       return null;
     }

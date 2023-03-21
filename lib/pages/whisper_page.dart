@@ -153,7 +153,7 @@ class _WhisperPageState extends State<WhisperPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 150,),
+              const SizedBox(height: 110,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.end,

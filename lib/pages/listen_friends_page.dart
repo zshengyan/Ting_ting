@@ -153,7 +153,7 @@ class _ListenPageState extends State<ListenPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 150,),
+              const SizedBox(height: 110,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.end,

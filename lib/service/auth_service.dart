@@ -12,8 +12,7 @@ class AuthService {
   static final Dio dio = Dio(BaseOptions(baseUrl: baseURL));
 
   static Future register() async {
-    var response = (
-        await dio.post("/auth/register", data: {
+    var response = (await dio.post("/auth/register", data: {
       "username": newUser,
       "password": newPass,
       "nickname": nickName,
@@ -55,8 +54,6 @@ class AuthService {
     }
     return response["data"]["question"];
   }
-
-  
 
   static Future<String> getInfo(String filed, String token) async {
     var response = (await dio.get(

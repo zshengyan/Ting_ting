@@ -4,6 +4,7 @@ import 'package:ting/model/basic_user_info.dart';
 import 'package:ting/pages/login_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ting/pages/main_page.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -15,25 +16,29 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: getUserInfo(),
+        future: getUserInfo(),
         builder: (context, snapshot) {
-          if(snapshot.connectionState == ConnectionState.waiting) {
-            return const SizedBox(width: 0,height: 0,);
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const SizedBox(
+              width: 0,
+              height: 0,
+            );
           } else if (snapshot.connectionState == ConnectionState.done) {
             print("getUserInfo Done");
-            return
-              GetMaterialApp(
+            return GetMaterialApp(
               title: 'Flutter Demo',
               theme: ThemeData(
                 primarySwatch: Colors.blue,
               ),
-              home: (userInfo.username == '') ? const  LoginPage() : const MainPage(),
+              home: const MainPage(),
+              // home: (userInfo.username == '') ? const  LoginPage() : const MainPage(),
             );
           }
-          return const SizedBox(width: 0,height: 0,);
-        }
-    );
-
+          return const SizedBox(
+            width: 0,
+            height: 0,
+          );
+        });
 
     //   GetMaterialApp(
     //   title: 'Flutter Demo',
@@ -47,6 +52,8 @@ class MyApp extends StatelessWidget {
 }
 
 Future<void> getUserInfo() async {
-  userInfo.username = (await SharedPreferences.getInstance()).getString("username") ?? '';
-  userInfo.nickname = (await SharedPreferences.getInstance()).getString("nickname") ?? '';
+  userInfo.username =
+      (await SharedPreferences.getInstance()).getString("username") ?? '';
+  userInfo.nickname =
+      (await SharedPreferences.getInstance()).getString("nickname") ?? '';
 }

@@ -34,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
               Container(
                 width: 100,
                 height: 100,
-                margin: const EdgeInsets.fromLTRB(16, 124, 0, 0),
+                margin: const EdgeInsets.fromLTRB(16, 84, 0, 0),
                 decoration: const BoxDecoration(
                     image: DecorationImage(
                         image: AssetImage("img/loginIcon.png"),
@@ -208,7 +208,7 @@ class _LoginPageState extends State<LoginPage> {
                             ..onTap = () => Get.to(() => const ForgetpawPage()),
                           children: [
                             const TextSpan(
-                              text: "                                    ",
+                              text: "                                   ",
                               style: TextStyle(
                                 fontSize: 20,
                               ),
@@ -228,10 +228,11 @@ class _LoginPageState extends State<LoginPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const SizedBox(
-                          width: 100,
+                        const Expanded(
+                          flex: 1, child: SizedBox(),
                         ),
                         Expanded(
+                          flex: 2,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(21),
                             child: Stack(
@@ -253,18 +254,18 @@ class _LoginPageState extends State<LoginPage> {
                                     const EdgeInsets.fromLTRB(35, 7, 36, 8),
                                     foregroundColor: Colors.black,
                                     textStyle: const TextStyle(
-                                      fontSize: 22,
+                                      fontSize: 20,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  child: const Text('确定'),
+                                  child: Center(child: const Text('确定')),
                                 ),
                               ],
                             ),
                           ),
                         ),
-                        const SizedBox(
-                          width: 100,
+                        const Expanded(
+                          flex: 1, child: SizedBox(),
                         ),
                       ],
                     ),
