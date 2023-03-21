@@ -1,13 +1,17 @@
 import 'package:dio/dio.dart';
+
 const String BASEURL = "http://twt.subit.org.cn";
 
 class HTTPConfig {
   static const baseURL = BASEURL;
   static const timeout = 3000;
 }
+
 class LYFHttpRequest {
   static final BaseOptions options = BaseOptions(
-      baseUrl: HTTPConfig.baseURL, connectTimeout: HTTPConfig.timeout);
+    baseUrl: HTTPConfig.baseURL,
+    connectTimeout: const Duration(milliseconds: HTTPConfig.timeout),
+  );
   static final Dio dio = Dio(options);
 
   static Future<String?> Findfriend(String account) async {
@@ -23,7 +27,9 @@ class LYFHttpRequest {
   }
 
   static Future<String?> friendlist() async {
-    var response = (await dio.get("/friends/getFriendList",))
+    var response = (await dio.get(
+      "/friends/getFriendList",
+    ))
         .data;
     if (response["code"] != 10000) {
       return null;
