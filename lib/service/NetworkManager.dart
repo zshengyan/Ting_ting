@@ -28,11 +28,8 @@ class LYFHttpRequest {
     }
     return response["token"];
   }
-
   static Future<String?> getFriendList() async {
-    var response = (await dio.get(
-      "/friends/getFriendList",
-    ))
+    var response = (await dio.get("/friends/getFriendList",))
         .data;
     if (response["code"] != 10000) {
       return null;
