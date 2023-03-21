@@ -2,19 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:ting/components/FriendColumn.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
+import 'package:ting/model/basic_user_info.dart';
+import 'package:ting/service/NetworkManager.dart';
 
 var visibility = false;
 
-class FriendInformation {
-  String username;
-  String nickname;
-  String token;
+var _account = TextEditingController();
+var account = _account.text;
 
-  FriendInformation(this.username, this.nickname, this.token);
-
-  factory FriendInformation.fromJSON(Map<String, dynamic> json) =>
-      FriendInformation(json["username"], json["nickname"], json["token"]);
+IfAccountExist(){
+  LYFHttpRequest.Requestfriend(_account.text);
 }
+
 
 class SearchFriend extends StatefulWidget {
   const SearchFriend({super.key});
@@ -88,7 +87,8 @@ class _SearchFriendState extends State<SearchFriend> {
                     borderRadius: BorderRadius.all(
                         Radius.circular(20.0)),
                   ),
-                  child: const TextField(
+                  child: TextField(
+                    controller: _account,
                     cursorColor: Color(0xFF656565),
                     cursorHeight: 29,
                     decoration: InputDecoration(
@@ -130,14 +130,7 @@ class _SearchFriendState extends State<SearchFriend> {
                   child: MaterialButton(
                     onPressed: (){
                       //找到特定的朋友
-                      void getHttp() async {
-                        try {
-                          Response response = await Dio().get("");
-                          print(response);
-                        } catch (e) {
-                          print(e);
-                        }
-                      }
+                      print(_account.text);
                       IfAccountExist(){
                         //若输入账号不存在，红色字体显现
 

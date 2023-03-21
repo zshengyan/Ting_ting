@@ -7,10 +7,9 @@ import 'package:ting/components/menu.dart';
 import 'package:ting/components/popmenu.dart';
 
 List<String> litems = ['用户1','用户2','用户3','用户4','用户5','用户6','用户7','用户8','用户9','用户10'];
-
-void function() {
-
-}
+List<String>? FriendName;
+List<String>? FriendIcon;
+var fl = LYFHttpRequest.getFriendList();
 
 class FriendColumn extends StatefulWidget {
   const FriendColumn({super.key});
@@ -215,14 +214,11 @@ class _FriendColumnState extends State<FriendColumn> {
                 child: MaterialButton(
                   onPressed: (){
                     //进入加好友页面，按照好友账号搜寻
+                    print(fl);
                     Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => SearchFriend())
                     );
-                  },
-                  onLongPress: (){
-                    //长摁唤出删除好友弹窗
-
                   },
                   child: Container(
                     width: 370,
