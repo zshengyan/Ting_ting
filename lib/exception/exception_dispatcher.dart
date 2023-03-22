@@ -3,6 +3,7 @@ import 'package:ting/exception/blocked.dart';
 import 'package:ting/exception/invalid_error.dart';
 import 'package:ting/exception/no_privileges.dart';
 import 'package:ting/exception/password_error.dart';
+import 'package:ting/exception/user_not_exist.dart';
 import 'package:ting/exception/username_exist.dart';
 import 'package:ting/exception/username_password_not_match.dart';
 import 'package:ting/exception/wrong_security_answer.dart';
@@ -16,6 +17,7 @@ class ExceptionDispatcher {
     30004: PasswordErrorException(),
     30005: WrongSecurityAnswer(),
     30006: UsernameExist(),
+    30007: UserNotExist(),
     50001: InvalidError(),
   };
 

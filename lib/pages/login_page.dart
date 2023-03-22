@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ting/pages/forget_psw_page.dart';
+import 'package:ting/pages/forget_psw_usr_page.dart';
 import 'package:ting/pages/main_page.dart';
 import 'package:ting/pages/register_page.dart';
 import 'package:get/get.dart';
@@ -205,7 +206,7 @@ class _LoginPageState extends State<LoginPage> {
                           style: const TextStyle(
                               fontSize: 15, color: Colors.white),
                           recognizer: TapGestureRecognizer()
-                            ..onTap = () => Get.to(() => const ForgetpawPage()),
+                            ..onTap = () => Get.to(() => const ForgetpawUsrPage()),
                           children: [
                             const TextSpan(
                               text: "                                   ",

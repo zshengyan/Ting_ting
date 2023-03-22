@@ -59,12 +59,27 @@ class AuthService {
     }
   }
 
-  static Future<String> getForgetQuestion(int id) async {
-    var response = (await dio.get("/auth/forgetPassword/$id")).data;
+  static Future<String?> getSecurityQuestion(String usr) async {
+    var response = (await dio.get("/auth/forgetPassword/$usr")).data;
     if (response["code"] != 10000) {
-      //TODO: 报错处理
+      ExceptionDispatcher.dispatcher(response["code"]).alert();
+      return null;
     }
     return response["data"]["question"];
+  }
+
+  static Future<bool> resetPasswordBySecurity(
+      String usr, String pwd, String ans) async {
+    var response = (await dio.post("/auth/forgetPassword/$usr", data: {
+      "answer": ans,
+      "newPassword": pwd,
+    }))
+        .data;
+    if (response["code"] != 10000) {
+      ExceptionDispatcher.dispatcher(response["code"]).alert();
+      return false;
+    }
+    return true;
   }
 
   static Future<String> getInfo(String filed, String token) async {

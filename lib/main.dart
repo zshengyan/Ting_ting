@@ -30,13 +30,12 @@ class MyApp extends StatelessWidget {
               height: 0,
             );
           } else if (snapshot.connectionState == ConnectionState.done) {
-            print("getUserInfo Done");
             return GetMaterialApp(
-              title: 'Flutter Demo',
-              theme: ThemeData(
-                primarySwatch: Colors.blue,
-              ),
-              home: const ForgetpawUsrPage(),
+                title: 'TingTing',
+                theme: ThemeData(
+                  primarySwatch: Colors.blue,
+                ),
+                home: const LoginPage()
               // home: (!login) ? const LoginPage() : const MainPage(),
             );
           }

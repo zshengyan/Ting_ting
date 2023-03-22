@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:ting/pages/secret_qu_page.dart';
+import 'package:ting/service/auth_service.dart';
+
+import 'forget_psw_page.dart';
 
 class ForgetpawUsrPage extends StatefulWidget {
   const ForgetpawUsrPage({Key? key}) : super(key: key);
@@ -8,6 +13,15 @@ class ForgetpawUsrPage extends StatefulWidget {
 }
 
 class _ForgetpawUsrPageState extends State<ForgetpawUsrPage> {
+  final TextEditingController _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    // 释放控制器资源
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,23 +103,25 @@ class _ForgetpawUsrPageState extends State<ForgetpawUsrPage> {
                           offset: const Offset(1, 1),
                           color: Colors.white.withOpacity(0.8))
                     ]),
-                child: const TextField(
+                child: TextField(
+                  controller: _controller,
                   cursorColor: Colors.black54,
                   cursorHeight: 20,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
-                          borderRadius: BorderRadius.all(Radius.circular(20))),
+                        borderSide: BorderSide(color: Colors.white),
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                      ),
                       enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                          borderSide: BorderSide(
-                            color: Colors.white38,
-                          )),
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        borderSide: BorderSide(
+                          color: Colors.white38,
+                        ),
+                      ),
                       border: OutlineInputBorder(
                           borderRadius:
                               BorderRadius.all(Radius.circular(20.0))),
                       floatingLabelBehavior: FloatingLabelBehavior.never,
-                      labelText: "  请输入答案",
                       labelStyle: TextStyle(
                         fontSize: 18,
                         color: Colors.black54,
@@ -136,7 +152,25 @@ class _ForgetpawUsrPageState extends State<ForgetpawUsrPage> {
                                   ),
                                 ),
                                 TextButton(
-                                  onPressed: () {},
+                                  onPressed: () async {
+                                    var usr = _controller.text;
+                                    if (usr == "") {
+                                      Fluttertoast.showToast(msg: "用户名不可为空");
+                                      return;
+                                    }
+                                    var question =
+                                        await AuthService.getSecurityQuestion(
+                                            usr);
+                                    if (question == null) return;
+                                    if (mounted) {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (_) => ForgetpawPage(
+                                                  user: usr,
+                                                  question: question)));
+                                    }
+                                  },
                                   style: TextButton.styleFrom(
                                     foregroundColor: Colors.black,
                                     textStyle: const TextStyle(
