@@ -23,10 +23,9 @@ class _WhisperPageState extends State<WhisperPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               GestureDetector(
-                onTap: () =>
-                    Navigator.push(context, MaterialPageRoute(builder: (context) {
-                      return const ListenPage();
-                    })),
+                onTap: (){
+                  Navigator.pop(context);
+                },
                 child: Container(
                     width: 55,
                     height: 35,
@@ -47,7 +46,8 @@ class _WhisperPageState extends State<WhisperPage> {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.of(context).push(_createRoute());
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
                 },
                 child: Container(
                     height: 50,

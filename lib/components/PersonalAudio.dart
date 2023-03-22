@@ -1,19 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:ting/components/Personal.dart';
 
-List<String> litems = ['用户1','用户2','用户3','用户4','用户5','用户6','用户7','用户8','用户9','用户10'];
+List<String> litems = [
+  '用户1',
+  '用户2',
+  '用户3',
+  '用户4',
+  '用户5',
+  '用户6',
+  '用户7',
+  '用户8',
+  '用户9',
+  '用户10'
+];
 
 class PersonalAudio extends StatefulWidget {
   const PersonalAudio({super.key});
+
   @override
   State<PersonalAudio> createState() => _PersonalAudioState();
 }
 
 class _PersonalAudioState extends State<PersonalAudio> {
-
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: const Color(0xFF303030),
       resizeToAvoidBottomInset: false,
@@ -37,81 +47,74 @@ class _PersonalAudioState extends State<PersonalAudio> {
                     ),
                   ),
                   child: MaterialButton(
-                    onPressed: (){
+                    onPressed: () {
                       //回到个人简介页面Personal
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Personal())
-                      );
+                      Navigator.pop(context);
                     },
                   ),
                 ),
               ],
             ),
             const Align(
-              alignment: FractionalOffset(212/430, 69/932),
-              child: (
-                  Text('Ting',
-                    style: TextStyle(
-                      fontFamily: 'Inter',
-                      fontSize: 40,
-                      fontWeight: FontWeight.w900,
-                      fontStyle: FontStyle.italic,
-                      color: Color(0xFFD2D2D2),
-                      height: 1.2,
-                    ),
-                  )
-              ),
+              alignment: FractionalOffset(212 / 430, 69 / 932),
+              child: (Text(
+                'Ting',
+                style: TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 40,
+                  fontWeight: FontWeight.w900,
+                  fontStyle: FontStyle.italic,
+                  color: Color(0xFFD2D2D2),
+                  height: 1.2,
+                ),
+              )),
             ),
             Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(75),
-                color: const Color(0xFFD2D2D2),
-              ),
-              height: 120,
-              width: 120,
-              margin: const EdgeInsets.fromLTRB(145, 53, 0, 0),
-              child: Center(
-                child: const Image(
-                  image: AssetImage('img/user.png'),
-                  width: 80,
-                  height: 80,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(75),
+                  color: const Color(0xFFD2D2D2),
                 ),
-              )
-            ),
+                height: 120,
+                width: 120,
+                margin: const EdgeInsets.fromLTRB(145, 53, 0, 0),
+                child: const Center(
+                  child: Image(
+                    image: AssetImage('img/user.png'),
+                    width: 80,
+                    height: 80,
+                  ),
+                )),
             Container(
               width: 80,
               height: 48,
               margin: const EdgeInsets.fromLTRB(173, 17, 0, 0),
-              child: const Text('昵称',
+              child: const Text(
+                '昵称',
                 style: TextStyle(
                     fontWeight: FontWeight.w900,
                     fontFamily: 'Inter',
                     fontSize: 32,
-                    color: Color(0xFFFFFFFF)
-                ),
+                    color: Color(0xFFFFFFFF)),
               ),
             ),
             Container(
               height: 506,
               width: 405,
               margin: const EdgeInsets.fromLTRB(13, 60, 13, 0),
-              decoration: const BoxDecoration(
-                  color: Color(0xFF303030)
-              ),
-              child: Expanded(
+              decoration: const BoxDecoration(color: Color(0xFF303030)),
+              child: SizedBox(
+                  width: double.infinity,
                   child: ListView.builder(
                       itemCount: litems.length,
                       itemBuilder: (BuildContext ctxt, int Index) {
                         return OutlinedButton(
                           style: ButtonStyle(
                             padding: MaterialStateProperty.all(
-                                const EdgeInsets.symmetric(horizontal: 0, vertical: 0)),
+                                const EdgeInsets.symmetric(
+                                    horizontal: 0, vertical: 0)),
                           ),
-
-                          onPressed: (){
+                          onPressed: () {
                             //进入好友基本简介页面
-
                           },
                           child: Column(
                             children: [
@@ -125,23 +128,22 @@ class _PersonalAudioState extends State<PersonalAudio> {
                                     Container(
                                       width: 87,
                                       height: 87,
-                                      decoration: BoxDecoration(
-                                          image: const DecorationImage(
-                                              image: AssetImage('img/voice.png')
-                                          )
-                                      ),
+                                      decoration: const BoxDecoration(
+                                          image: DecorationImage(
+                                              image:
+                                                  AssetImage('img/voice.png'))),
                                     ),
                                     Container(
                                       width: 23,
                                     ),
                                     Container(
-                                      width: 143,
+                                      width: 110,
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             litems[Index],
-
                                             style: const TextStyle(
                                               fontSize: 24,
                                               fontWeight: FontWeight.w700,
@@ -159,44 +161,44 @@ class _PersonalAudioState extends State<PersonalAudio> {
                                       ),
                                     ),
                                     OutlinedButton(
-                                      onPressed: (){
+                                      onPressed: () {
                                         //播放该段录音
-
                                       },
                                       style: ButtonStyle(
-                                        minimumSize: MaterialStateProperty.all(Size(1, 1)),
-                                        padding: MaterialStateProperty.all(EdgeInsets.zero),
-                                      ),
-                                      child: Container(
-                                        width: 50,
-                                        height: 50,
-                                        decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                            image: AssetImage('img/start.png')
-                                          )
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      width: 18,
-                                    ),
-                                    OutlinedButton(
-                                      onPressed: (){
-                                        //展开
-
-                                      },
-                                      style: ButtonStyle(
-                                        minimumSize: MaterialStateProperty.all(Size(1, 1)),
-                                        padding: MaterialStateProperty.all(EdgeInsets.zero),
+                                        minimumSize: MaterialStateProperty.all(
+                                            Size(1, 1)),
+                                        padding: MaterialStateProperty.all(
+                                            EdgeInsets.zero),
                                       ),
                                       child: Container(
                                         width: 50,
                                         height: 50,
                                         decoration: BoxDecoration(
                                             image: DecorationImage(
-                                                image: AssetImage('img/more.png')
-                                            )
-                                        ),
+                                                image: AssetImage(
+                                                    'img/start.png'))),
+                                      ),
+                                    ),
+                                    Container(
+                                      width: 18,
+                                    ),
+                                    OutlinedButton(
+                                      onPressed: () {
+                                        //展开
+                                      },
+                                      style: ButtonStyle(
+                                        minimumSize: MaterialStateProperty.all(
+                                            Size(1, 1)),
+                                        padding: MaterialStateProperty.all(
+                                            EdgeInsets.zero),
+                                      ),
+                                      child: Container(
+                                        width: 50,
+                                        height: 50,
+                                        decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                                image: AssetImage(
+                                                    'img/more.png'))),
                                       ),
                                     )
                                   ],
@@ -208,14 +210,11 @@ class _PersonalAudioState extends State<PersonalAudio> {
                             ],
                           ),
                         );
-                      }
-                  )
-              ),
-            ),   //滑动列表
+                      })),
+            ), //滑动列表
           ],
         ),
       ),
     );
-
   }
 }

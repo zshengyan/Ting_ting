@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ting/components/Personal.dart';
 import 'package:ting/pages/listen_friends_page.dart';
 import '../components/FriendColumn.dart';
 
@@ -40,7 +41,11 @@ class _MainPageState extends State<MainPage> {
                 iconSize: 36,
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
-                onPressed: () {  },
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return const Personal();
+                  }));
+                },
               ),
             ],
           ),

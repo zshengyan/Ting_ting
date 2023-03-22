@@ -1,5 +1,8 @@
+import 'dart:ffi';
+
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ting/exception/exception_dispatcher.dart';
 import 'package:ting/model/basic_user_info.dart';
 import '../pages/login_page.dart';
 import '../pages/register_page.dart';
@@ -30,21 +33,30 @@ class AuthService {
     }
   }
 
-  static Future<String?> login() async {
+  static Future<Map<String, dynamic>?> login(String usr, String pwd) async {
     var response = (await dio.post("/auth/login", data: {
-      "username": user,
-      "password": pass,
+      "username": usr,
+      "password": pwd,
     }))
         .data;
     if (response["code"] != 10000) {
+      ExceptionDispatcher.dispatcher(response["code"]).alert();
       return null;
-    } else {
-      (await SharedPreferences.getInstance()).setString("username", user);
-      userInfo.username = user;
-      (await SharedPreferences.getInstance()).setString("password", pass);
-      userInfo.password = pass;
     }
-    return response["token"];
+    return response["data"];
+  }
+
+  static Future<bool> checkLogin() async {
+    var pref = await SharedPreferences.getInstance();
+    try {
+      await dio.get("/info/1",
+          options: Options(headers: {
+            "Authorization": "Bearer ${pref.getString("token") ?? ""}",
+          }));
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 
   static Future<String> getForgetQuestion(int id) async {

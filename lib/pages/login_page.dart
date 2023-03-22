@@ -1,5 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ting/pages/forget_psw_page.dart';
 import 'package:ting/pages/main_page.dart';
 import 'package:ting/pages/register_page.dart';
@@ -12,6 +14,7 @@ class LoginPage extends StatefulWidget {
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
+
 var _username = TextEditingController();
 var user = _username.text;
 var _password = TextEditingController();
@@ -25,10 +28,7 @@ class _LoginPageState extends State<LoginPage> {
       body: SingleChildScrollView(
         reverse: true,
         child: SizedBox(
-          height: MediaQuery
-              .of(context)
-              .size
-              .height * 0.95,
+          height: MediaQuery.of(context).size.height * 0.95,
           child: Column(
             children: [
               Container(
@@ -91,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
                     const Text(
                       "Hello!",
                       style:
-                      TextStyle(fontSize: 35, color: Colors.yellowAccent),
+                          TextStyle(fontSize: 35, color: Colors.yellowAccent),
                     ),
                     const SizedBox(
                       height: 20,
@@ -117,7 +117,7 @@ class _LoginPageState extends State<LoginPage> {
                       decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius:
-                          const BorderRadius.all(Radius.circular(30.0)),
+                              const BorderRadius.all(Radius.circular(30.0)),
                           boxShadow: [
                             BoxShadow(
                                 blurRadius: 10,
@@ -132,10 +132,10 @@ class _LoginPageState extends State<LoginPage> {
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.white),
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(30))),
+                                    BorderRadius.all(Radius.circular(30))),
                             enabledBorder: OutlineInputBorder(
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(30)),
+                                    BorderRadius.all(Radius.circular(30)),
                                 borderSide: BorderSide(
                                   color: Colors.white38,
                                 )),
@@ -164,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                       decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius:
-                          const BorderRadius.all(Radius.circular(30.0)),
+                              const BorderRadius.all(Radius.circular(30.0)),
                           boxShadow: [
                             BoxShadow(
                                 blurRadius: 10,
@@ -180,10 +180,10 @@ class _LoginPageState extends State<LoginPage> {
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.white),
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(30))),
+                                    BorderRadius.all(Radius.circular(30))),
                             enabledBorder: OutlineInputBorder(
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(30)),
+                                    BorderRadius.all(Radius.circular(30)),
                                 borderSide: BorderSide(
                                   color: Colors.white38,
                                 )),
@@ -229,7 +229,8 @@ class _LoginPageState extends State<LoginPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Expanded(
-                          flex: 1, child: SizedBox(),
+                          flex: 1,
+                          child: SizedBox(),
                         ),
                         Expanded(
                           flex: 2,
@@ -244,28 +245,52 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                 ),
                                 TextButton(
-                                  onPressed: () =>
-                                      Navigator.push(context,
-                                          MaterialPageRoute(builder: (context) {
-                                            return const MainPage();
-                                          })),
+                                  onPressed: () async {
+                                    if (_username.text == "" ||
+                                        _password.text == "") {
+                                      Fluttertoast.showToast(msg: "用户名或密码不可为空");
+                                      return;
+                                    }
+                                    var res = await AuthService.login(
+                                        _username.text, _password.text);
+                                    if (res == null) return;
+                                    print(res);
+                                    var prefs =
+                                        await SharedPreferences.getInstance();
+                                    await prefs.setString("token", res["token"]);
+                                    await prefs.setInt("id", res["id"]);
+                                    await prefs.setString(
+                                        "username", res["username"]);
+                                    await prefs.setString(
+                                        "nickname", res["nickname"]);
+                                    if (mounted) {
+                                      Navigator.pop(context);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => const MainPage(),
+                                        ),
+                                      );
+                                    }
+                                  },
                                   style: TextButton.styleFrom(
                                     padding:
-                                    const EdgeInsets.fromLTRB(35, 7, 36, 8),
+                                        const EdgeInsets.fromLTRB(35, 7, 36, 8),
                                     foregroundColor: Colors.black,
                                     textStyle: const TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  child: Center(child: const Text('确定')),
+                                  child: const Center(child: Text('确定')),
                                 ),
                               ],
                             ),
                           ),
                         ),
                         const Expanded(
-                          flex: 1, child: SizedBox(),
+                          flex: 1,
+                          child: SizedBox(),
                         ),
                       ],
                     ),

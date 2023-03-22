@@ -40,10 +40,7 @@ class _FriendRequestState extends State<FriendRequest> {
                   child: MaterialButton(
                     onPressed: (){
                       //回到FriendColumn
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => FriendColumn())
-                      );
+                      Navigator.pop(context);
                     },
                   ),
                 ),

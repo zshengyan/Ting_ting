@@ -52,10 +52,7 @@ class _SearchFriendState extends State<SearchFriend> {
                   child: MaterialButton(
                     onPressed: (){
                       //回到主界面
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const FriendColumn())
-                      );
+                      Navigator.pop(context);
                     },
                   ),
                 ),

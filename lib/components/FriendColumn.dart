@@ -67,10 +67,7 @@ class _FriendColumnState extends State<FriendColumn> {
                     child: MaterialButton(
                       onPressed: (){
                         //回到主界面
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => MainPage())
-                        );
+                        Navigator.pop(context);
                       },
                     ),
                   ),

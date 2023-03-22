@@ -48,7 +48,7 @@ class _ListenPageState extends State<ListenPage> {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.of(context).push(_createRoute());
+                  Navigator.of(context).pop();
                 },
                 child: Container(
                     height: 50,

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class ForgetpawPage extends StatefulWidget {
-  const ForgetpawPage({Key? key}) : super(key: key);
+class ForgetpawUsrPage extends StatefulWidget {
+  const ForgetpawUsrPage({Key? key}) : super(key: key);
 
   @override
-  State<ForgetpawPage> createState() => _ForgetpawPageState();
+  State<ForgetpawUsrPage> createState() => _ForgetpawUsrPageState();
 }
 
-class _ForgetpawPageState extends State<ForgetpawPage> {
+class _ForgetpawUsrPageState extends State<ForgetpawUsrPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ting/components/PersonalAudio.dart';
 import 'package:ting/model/basic_user_info.dart';
+import 'package:ting/pages/forget_psw_page.dart';
+import 'package:ting/pages/forget_psw_usr_page.dart';
 import 'package:ting/pages/login_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ting/pages/main_page.dart';
+import 'package:ting/service/auth_service.dart';
 
 void main() {
   runApp(const MyApp());
 }
+
+var login = false;
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -30,8 +36,8 @@ class MyApp extends StatelessWidget {
               theme: ThemeData(
                 primarySwatch: Colors.blue,
               ),
-              home: const MainPage(),
-              // home: (userInfo.username == '') ? const  LoginPage() : const MainPage(),
+              home: const ForgetpawUsrPage(),
+              // home: (!login) ? const LoginPage() : const MainPage(),
             );
           }
           return const SizedBox(
@@ -52,8 +58,5 @@ class MyApp extends StatelessWidget {
 }
 
 Future<void> getUserInfo() async {
-  userInfo.username =
-      (await SharedPreferences.getInstance()).getString("username") ?? '';
-  userInfo.nickname =
-      (await SharedPreferences.getInstance()).getString("nickname") ?? '';
+  login = await AuthService.checkLogin();
 }

@@ -108,11 +108,11 @@ class _PersonalState extends State<Personal> {
               margin: const EdgeInsets.fromLTRB(79, 52, 0, 0),
               child: Row(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     width: 28,
                     height: 32,
                     child:
-                      const Image(
+                      Image(
                         image: AssetImage('img/pen.png'),
                       ),
                   ),
