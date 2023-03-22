@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ting/components/Personal.dart';
 import 'package:ting/pages/listen_friends_page.dart';
+import 'package:ting/service/auth_service.dart';
 import '../components/FriendColumn.dart';
 
 class MainPage extends StatefulWidget {
@@ -11,14 +12,24 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  late final String? nickname;
+  late final String? avatar;
+
+  void _checkLogin() async {
+    if (!await AuthService.checkLogin()) {
+      Navigator.pushNamedAndRemoveUntil(context, "login", (route) => false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    double w =MediaQuery.of(context).size.width;
-    double h =MediaQuery.of(context).size.height;
+    _checkLogin();
+    double w = MediaQuery.of(context).size.width;
+    double h = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Colors.white10,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+      body: ListView(
+        // crossAxisAlignment: CrossAxisAlignment.center,
         //mainAxisAlignment: MainAxissAlignment.start,
         children: [
           Row(
@@ -30,10 +41,10 @@ class _MainPageState extends State<MainPage> {
                 iconSize: 40,
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
-                onPressed:() =>
-                    Navigator.push(context, MaterialPageRoute(builder: (context) {
-                      return const FriendColumn();
-                    })),
+                onPressed: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) {
+                  return const FriendColumn();
+                })),
               ),
               IconButton(
                 padding: const EdgeInsets.fromLTRB(0, 40, 28, 0),
@@ -50,17 +61,19 @@ class _MainPageState extends State<MainPage> {
             ],
           ),
           Container(
-            width: w*0.86,
-            height: 19,
-            decoration: const BoxDecoration(
-              border: Border(bottom: BorderSide(color: Color(0xFFFFE57F),width: 1.0)),
-            ),
-            child: const Image(
-              image: AssetImage("img/Ting.png"),
-              alignment: Alignment.topCenter,
-            )
+              width: w * 0.86,
+              height: 19,
+              decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: Color(0xFFFFE57F), width: 1.0)),
+              ),
+              child: const Image(
+                image: AssetImage("img/Ting.png"),
+                alignment: Alignment.topCenter,
+              )),
+          const SizedBox(
+            height: 320,
           ),
-          const SizedBox(height: 350,),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -69,20 +82,18 @@ class _MainPageState extends State<MainPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(
-                      width: 80,
-                      height: 80,
-                      child: IconButton(
-                        icon: const Image(image: AssetImage("img/whisper.png")),
-                        splashColor: Colors.transparent,
-                        //highlightColor: Colors.transparent,
-                        onPressed: () {  },
-                      ),
-                  ),
-                  const Text("悄悄话",
-                    style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.white
+                    width: 80,
+                    height: 80,
+                    child: IconButton(
+                      icon: const Image(image: AssetImage("img/whisper.png")),
+                      splashColor: Colors.transparent,
+                      //highlightColor: Colors.transparent,
+                      onPressed: () {},
                     ),
+                  ),
+                  const Text(
+                    "悄悄话",
+                    style: TextStyle(fontSize: 18, color: Colors.white),
                   )
                 ],
               ),
@@ -101,7 +112,7 @@ class _MainPageState extends State<MainPage> {
                   color: const Color(0xFFFFE57F),
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
-                  onPressed: () {  },
+                  onPressed: () {},
                 ),
               ),
               Column(
@@ -111,23 +122,24 @@ class _MainPageState extends State<MainPage> {
                     width: 70,
                     height: 70,
                     child: IconButton(
-                      icon: const Image(image: AssetImage("img/change voice.png")),
+                      icon: const Image(
+                          image: AssetImage("img/change voice.png")),
                       splashColor: Colors.transparent,
                       //highlightColor: Colors.transparent,
-                      onPressed: () {  },
+                      onPressed: () {},
                     ),
                   ),
-                  const Text("变声",
-                    style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.white
-                    ),
+                  const Text(
+                    "变声",
+                    style: TextStyle(fontSize: 18, color: Colors.white),
                   )
                 ],
               ),
             ],
           ),
-          SizedBox(height: h*0.24,),
+          SizedBox(
+            height: h * 0.24,
+          ),
           GestureDetector(
             onTap: () {
               Navigator.of(context).push(_createRoute());
@@ -144,9 +156,7 @@ class _MainPageState extends State<MainPage> {
                           color: Color(0xFFFFE57F),
                           width: 18,
                           style: BorderStyle.solid),
-                      right: BorderSide(
-                          width: 14,
-                          style: BorderStyle.solid),
+                      right: BorderSide(width: 14, style: BorderStyle.solid),
                       left: BorderSide(
                           color: Color(0xFFFFE57F),
                           width: 14,
@@ -155,34 +165,34 @@ class _MainPageState extends State<MainPage> {
                   ),
                 ),
                 Container(
-                  width: w*0.5,
+                  width: w * 0.5,
                   height: 10,
                   margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                   decoration: const BoxDecoration(
-                    border: Border(top: BorderSide(color: Color(0xFFFFE57F),width: 2.5)),
+                    border: Border(
+                        top: BorderSide(color: Color(0xFFFFE57F), width: 2.5)),
                   ),
                 ),
                 Container(
-                  width: w*0.1,
+                  width: w * 0.1,
                   height: 0,
                   margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                   decoration: const BoxDecoration(
-                    border: Border(bottom: BorderSide(color: Color(0xFFFFE57F),width: 3.0)),
+                    border: Border(
+                        bottom:
+                            BorderSide(color: Color(0xFFFFE57F), width: 3.0)),
                   ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(width: w*0.32, height: 20),
+                    SizedBox(width: w * 0.32, height: 20),
                     SizedBox(
-                      width: w*0.5,
+                      width: w * 0.5,
                       height: 30,
                       child: const Text(
                         "朋友的听汀",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15
-                        ),
+                        style: TextStyle(color: Colors.white, fontSize: 15),
                       ),
                     )
                   ],

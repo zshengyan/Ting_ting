@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:ting/pages/secret_qu_page.dart';
 
@@ -206,20 +207,27 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ),
                                 ),
                                 TextButton(
-                                  onPressed: () => Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
-                                    return const SecretquPage();
-                                  })),
+                                  onPressed: () {
+                                    if (_newPassword.text == "" ||
+                                        _newPassword.text == "") {
+                                      Fluttertoast.showToast(msg: "用户名和密码不可为空");
+                                    }
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (context) {
+                                      return SecretquPage(
+                                        usr: _newUsername.text,
+                                        pwd: _newPassword.text,
+                                      );
+                                    }));
+                                  },
                                   style: TextButton.styleFrom(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(35, 7, 36, 8),
                                     foregroundColor: Colors.black,
                                     textStyle: const TextStyle(
                                       fontSize: 22,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  child: const Text('注册'),
+                                  child: const Center(child: Text('注册')),
                                 ),
                               ],
                             ),
@@ -246,7 +254,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               style: const TextStyle(
                                   fontSize: 15, color: Colors.white),
                               recognizer: TapGestureRecognizer()
-                                ..onTap = () => Get.back(),
+                                ..onTap = () => Navigator.pop(context),
                             )
                           ]),
                     )

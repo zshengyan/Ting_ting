@@ -1,29 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ting/components/ChangeNickname.dart';
 import 'package:ting/components/Collection.dart';
 import 'package:ting/components/PersonalAudio.dart';
 import 'package:dio/dio.dart';
-
+import 'package:ting/service/api_service.dart';
 
 class Personal extends StatefulWidget {
   const Personal({super.key});
+
   @override
   State<Personal> createState() => _PersonalState();
 }
 
 class _PersonalState extends State<Personal> {
+  Dio dio = Dio();
 
-  Dio dio =Dio();
-  void _getData() async{
+  void _getData() async {
     var url = "www.baidu.com";
     Response result = await Dio().get(url);
     print(result.data);
   }
 
+  String _nickname = "";
+
+  @override
+  void initState() {
+    super.initState();
+    _initNickname();
+  }
+
+  void _initNickname() async {
+    var api = ApiService.instance;
+    var nickname = await api.getUserInfo("nickname");
+    if (nickname == null) return;
+    setState(() {
+      _nickname = nickname;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: const Color(0xFF303030),
       resizeToAvoidBottomInset: false,
@@ -34,21 +51,20 @@ class _PersonalState extends State<Personal> {
           children: [
             Container(
               height: 69,
-            ),   //纯纯的占位符
+            ), //纯纯的占位符
             const Align(
-              alignment: FractionalOffset(212/430, 69/932),
-              child: (
-                  Text('Ting',
-                    style: TextStyle(
-                      fontFamily: 'Inter',
-                      fontSize: 40,
-                      fontWeight: FontWeight.w900,
-                      fontStyle: FontStyle.italic,
-                      color: Color(0xFFD2D2D2),
-                      height: 1.2,
-                    ),
-                  )
-              ),
+              alignment: FractionalOffset(212 / 430, 69 / 932),
+              child: (Text(
+                'Ting',
+                style: TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 40,
+                  fontWeight: FontWeight.w900,
+                  fontStyle: FontStyle.italic,
+                  color: Color(0xFFD2D2D2),
+                  height: 1.2,
+                ),
+              )),
             ),
             Stack(
               children: [
@@ -60,10 +76,8 @@ class _PersonalState extends State<Personal> {
                     style: ButtonStyle(
                       padding: MaterialStateProperty.all(EdgeInsets.zero),
                     ),
-
-                    onPressed: (){
+                    onPressed: () {
                       //按下查看自己的头像
-
                     },
                     child: Container(
                       decoration: BoxDecoration(
@@ -86,8 +100,7 @@ class _PersonalState extends State<Personal> {
                     style: ButtonStyle(
                       padding: MaterialStateProperty.all(EdgeInsets.zero),
                     ),
-
-                    onPressed: (){
+                    onPressed: () {
                       //按下拍摄新头像
                       _getData();
                     },
@@ -111,25 +124,23 @@ class _PersonalState extends State<Personal> {
                   const SizedBox(
                     width: 28,
                     height: 32,
-                    child:
-                      Image(
-                        image: AssetImage('img/pen.png'),
-                      ),
+                    child: Image(
+                      image: AssetImage('img/pen.png'),
+                    ),
                   ),
                   Container(
                     width: 205,
                     height: 45,
                     decoration: const BoxDecoration(
                       color: Color(0xFFF5F5F5),
-                      borderRadius: BorderRadius.all(
-                          Radius.circular(20.0)),
+                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
                     ),
-                    child: const Text(
-                      '此处应当显示昵称',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 24,
-                          color: Color(0xFF303030),
+                    child: Text(
+                      _nickname,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 24,
+                        color: Color(0xFF303030),
                       ),
                     ),
                   ),
@@ -140,12 +151,12 @@ class _PersonalState extends State<Personal> {
                       style: ButtonStyle(
                         padding: MaterialStateProperty.all(EdgeInsets.zero),
                       ),
-                      onPressed: (){
+                      onPressed: () {
                         //按下修改昵称
                         Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => ChangeNickname())
-                        );
+                            MaterialPageRoute(
+                                builder: (context) => ChangeNickname()));
                       },
                       child: const Image(
                         image: AssetImage('img/arrowright.png'),
@@ -160,49 +171,42 @@ class _PersonalState extends State<Personal> {
               height: 54,
               margin: const EdgeInsets.fromLTRB(70, 47, 0, 0),
               decoration: BoxDecoration(
-                border: Border.all(
-                  color: const Color(0xFFFFEE8A),
-                  width: 1.2,
-                ),
-                borderRadius: BorderRadius.circular(10)
-              ),
+                  border: Border.all(
+                    color: const Color(0xFFFFEE8A),
+                    width: 1.2,
+                  ),
+                  borderRadius: BorderRadius.circular(10)),
               child: OutlinedButton(
-                style: ButtonStyle(
-                  padding: MaterialStateProperty.all(EdgeInsets.zero),
-                ),
-                onPressed: (){
-                  //进入我的收藏界面
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Collection())
-                  );
-                },
-                child: Row(
-                  children: [
-                    Container(
-                      width: 39,
-                      height: 36,
-                      margin: const EdgeInsets.fromLTRB(47, 0, 0, 0),
-                      decoration: const BoxDecoration(
-                          image: DecorationImage(
-                          image: AssetImage('img/star.png')
-                        )
+                  style: ButtonStyle(
+                    padding: MaterialStateProperty.all(EdgeInsets.zero),
+                  ),
+                  onPressed: () {
+                    //进入我的收藏界面
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Collection()));
+                  },
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 39,
+                        height: 36,
+                        margin: const EdgeInsets.fromLTRB(47, 0, 0, 0),
+                        decoration: const BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage('img/star.png'))),
                       ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(30, 0, 0, 0),
-                      child: const Text(
-                        '我的收藏',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 24,
-                          color: Color(0xFFFFEE8A)
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(30, 0, 0, 0),
+                        child: const Text(
+                          '我的收藏',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 24,
+                              color: Color(0xFFFFEE8A)),
                         ),
-                      ),
-                    )
-                  ],
-                )
-              ),
+                      )
+                    ],
+                  )),
             ),
             Container(
               width: 290,
@@ -213,18 +217,17 @@ class _PersonalState extends State<Personal> {
                     color: const Color(0xFFFFEE8A),
                     width: 1.2,
                   ),
-                  borderRadius: BorderRadius.circular(10)
-              ),
+                  borderRadius: BorderRadius.circular(10)),
               child: OutlinedButton(
                   style: ButtonStyle(
                     padding: MaterialStateProperty.all(EdgeInsets.zero),
                   ),
-                  onPressed: (){
+                  onPressed: () {
                     //进入我的语音界面
                     Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => PersonalAudio())
-                    );
+                        MaterialPageRoute(
+                            builder: (context) => PersonalAudio()));
                   },
                   child: Row(
                     children: [
@@ -234,9 +237,7 @@ class _PersonalState extends State<Personal> {
                         margin: const EdgeInsets.fromLTRB(47, 0, 0, 0),
                         decoration: const BoxDecoration(
                             image: DecorationImage(
-                                image: AssetImage('img/voice.png')
-                            )
-                        ),
+                                image: AssetImage('img/voice.png'))),
                       ),
                       Container(
                         margin: const EdgeInsets.fromLTRB(30, 0, 0, 0),
@@ -245,13 +246,11 @@ class _PersonalState extends State<Personal> {
                           style: TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 24,
-                              color: Color(0xFFFFEE8A)
-                          ),
+                              color: Color(0xFFFFEE8A)),
                         ),
                       )
                     ],
-                  )
-              ),
+                  )),
             ),
             Container(
               width: 290,
@@ -261,9 +260,8 @@ class _PersonalState extends State<Personal> {
                   style: ButtonStyle(
                     padding: MaterialStateProperty.all(EdgeInsets.zero),
                   ),
-                  onPressed: (){
+                  onPressed: () {
                     //退出登录，返回登录界面
-
                   },
                   child: Row(
                     children: [
@@ -273,29 +271,34 @@ class _PersonalState extends State<Personal> {
                         margin: const EdgeInsets.fromLTRB(47, 0, 0, 0),
                         decoration: const BoxDecoration(
                             image: DecorationImage(
-                                image: AssetImage('img/quit.png')
-                            )
-                        ),
+                                image: AssetImage('img/quit.png'))),
                       ),
-                      Container(
-                        margin: const EdgeInsets.fromLTRB(11, 0, 0, 0),
-                        child: const Text(
-                          '退出登录',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 24,
-                              color: Color(0xFFFFEE8A)
+                      GestureDetector(
+                        onTap: () async {
+                          var prefs = await SharedPreferences.getInstance();
+                          await prefs.remove("token");
+                          if (mounted) {
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, "login", (route) => false);
+                          }
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.fromLTRB(11, 0, 0, 0),
+                          child: const Text(
+                            '退出登录',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 24,
+                                color: Color(0xFFFFEE8A)),
                           ),
                         ),
                       )
                     ],
-                  )
-              ),
+                  )),
             )
           ],
         ),
       ),
     );
-
   }
 }

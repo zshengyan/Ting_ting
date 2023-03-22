@@ -1,18 +1,112 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:ting/pages/login_page.dart';
 import 'package:ting/service/auth_service.dart';
 
 class RegisterPage2 extends StatefulWidget {
-  const RegisterPage2({Key? key}) : super(key: key);
+  final String usr, pwd, question, ans;
+
+  const RegisterPage2({
+    Key? key,
+    required this.usr,
+    required this.pwd,
+    required this.question,
+    required this.ans,
+  }) : super(key: key);
 
   @override
   State<RegisterPage2> createState() => _RegisterPage2State();
 }
 
-var _nickName = TextEditingController();
-var nickName = _nickName.text;
-
 class _RegisterPage2State extends State<RegisterPage2> {
+  final _nickName = TextEditingController();
+
+  final picker = ImagePicker();
+  XFile? _avatar;
+
+  Future<void> selectFile(ImageSource source) async {
+    final file = await picker.pickImage(source: source);
+    if (file != null) {
+      final croppedFile = await ImageCropper().cropImage(
+        sourcePath: file.path,
+        aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
+        compressQuality: 100,
+        maxWidth: 800,
+        maxHeight: 800,
+        compressFormat: ImageCompressFormat.jpg,
+      );
+      setState(() {
+        _avatar = XFile(croppedFile!.path);
+      });
+    }
+  }
+
+  void _chooseImage() async {
+    Widget cameraButton = TextButton(
+      style:
+          ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blue)),
+      child: const Text(
+        "相机",
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 20,
+        ),
+      ),
+      onPressed: () async {
+        await selectFile(ImageSource.camera);
+        if (mounted) {
+          Navigator.of(context).pop();
+        }
+      },
+    );
+
+    Widget galleryButton = TextButton(
+      style:
+          ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blue)),
+      child: const Text(
+        "相册",
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 20,
+        ),
+      ),
+      onPressed: () async {
+        await selectFile(ImageSource.gallery);
+        if (mounted) {
+          Navigator.of(context).pop();
+        }
+      },
+    );
+    AlertDialog alert = AlertDialog(
+      actions: [
+        Row(
+          children: [
+            Expanded(
+              flex: 2,
+              child: cameraButton,
+            ),
+            const Expanded(flex: 1, child: SizedBox()),
+            Expanded(
+              flex: 2,
+              child: galleryButton,
+            ),
+          ],
+        ),
+      ],
+    );
+    // 显示AlertDialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,12 +129,17 @@ class _RegisterPage2State extends State<RegisterPage2> {
                     Radius.circular(75),
                   ),
                 ),
-                child: IconButton(
-                  icon: const Icon(Icons.local_see),
-                  iconSize: 60,
-                  color: Colors.black,
-                  onPressed: () {},
-                ),
+                child: _avatar != null
+                    ? GestureDetector(
+                        onTap: _chooseImage,
+                        child: Image.file(File(_avatar!.path)),
+                      )
+                    : IconButton(
+                        icon: const Icon(Icons.local_see),
+                        iconSize: 60,
+                        color: Colors.black,
+                        onPressed: _chooseImage,
+                      ),
               ),
               const SizedBox(
                 height: 19,
@@ -71,7 +170,6 @@ class _RegisterPage2State extends State<RegisterPage2> {
                     ]),
                 child: TextField(
                   controller: _nickName,
-                  onChanged: (value) => {nickName = _nickName.text},
                   cursorColor: Colors.black54,
                   cursorHeight: 20,
                   decoration: const InputDecoration(
@@ -119,23 +217,40 @@ class _RegisterPage2State extends State<RegisterPage2> {
                                 ),
                                 TextButton(
                                   onPressed: () async {
-                                    await AuthService.register().then((value) =>
-                                        Navigator.push(context,
-                                            MaterialPageRoute(
-                                                builder: (context) {
-                                          return const LoginPage();
-                                        })));
+                                    if (_nickName.text == "") {
+                                      Fluttertoast.showToast(msg: "昵称不可为空");
+                                      return;
+                                    }
+                                    if (!await AuthService.register(
+                                        widget.usr,
+                                        widget.pwd,
+                                        _nickName.text,
+                                        widget.question,
+                                        widget.ans)) return;
+                                    var res = await AuthService.login(
+                                        widget.usr, widget.pwd);
+                                    if (res == null) {
+                                      Fluttertoast.showToast(msg: "UK ERROR");
+                                      return;
+                                    }
+                                    if (_avatar != null) {
+                                      AuthService.updateImage(
+                                          _avatar!, res["token"]);
+                                    }
+                                    Fluttertoast.showToast(msg: "注册成功");
+                                    if (mounted) {
+                                      Navigator.pushNamedAndRemoveUntil(
+                                          context, "login", (route) => false);
+                                    }
                                   },
                                   style: TextButton.styleFrom(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(70, 7, 69, 8),
                                     foregroundColor: Colors.black,
                                     textStyle: const TextStyle(
                                         fontSize: 22,
                                         fontWeight: FontWeight.bold,
                                         letterSpacing: 6),
                                   ),
-                                  child: const Text('完成注册'),
+                                  child: const Center(child: Text('完成注册')),
                                 ),
                               ],
                             ),

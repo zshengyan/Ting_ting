@@ -40,6 +40,10 @@ dependencies:
   get:
   dio:
   fluttertoast:
+  image_picker: ^0.8.7
+  alert: ^2.0.1
+  image_cropper: ^3.0.1
+  get_storage: ^2.1.1
 
 dev_dependencies:
   flutter_test:

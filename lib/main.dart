@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ting/components/PersonalAudio.dart';
-import 'package:ting/model/basic_user_info.dart';
-import 'package:ting/pages/forget_psw_page.dart';
-import 'package:ting/pages/forget_psw_usr_page.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:ting/pages/login_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ting/pages/main_page.dart';
+import 'package:ting/pages/register_page.dart';
+import 'package:ting/pages/register_page2.dart';
+import 'package:ting/router/router.dart';
 import 'package:ting/service/auth_service.dart';
 
-void main() {
+void main() async {
+  await GetStorage.init();
   runApp(const MyApp());
 }
 
@@ -31,12 +31,13 @@ class MyApp extends StatelessWidget {
             );
           } else if (snapshot.connectionState == ConnectionState.done) {
             return GetMaterialApp(
-                title: 'TingTing',
-                theme: ThemeData(
-                  primarySwatch: Colors.blue,
-                ),
-                home: const LoginPage()
-              // home: (!login) ? const LoginPage() : const MainPage(),
+              routes: RegisteredRouter.routers,
+              title: 'TingTing',
+              theme: ThemeData(
+                primarySwatch: Colors.blue,
+              ),
+              // home: const RegisterPage(),
+              home: (!login) ? const LoginPage() : const MainPage(),
             );
           }
           return const SizedBox(

@@ -206,7 +206,8 @@ class _LoginPageState extends State<LoginPage> {
                           style: const TextStyle(
                               fontSize: 15, color: Colors.white),
                           recognizer: TapGestureRecognizer()
-                            ..onTap = () => Get.to(() => const ForgetpawUsrPage()),
+                            ..onTap =
+                                () => Get.to(() => const ForgetpawUsrPage()),
                           children: [
                             const TextSpan(
                               text: "                                   ",
@@ -255,18 +256,19 @@ class _LoginPageState extends State<LoginPage> {
                                     var res = await AuthService.login(
                                         _username.text, _password.text);
                                     if (res == null) return;
+                                    _username.text = _password.text = "";
                                     print(res);
                                     var prefs =
                                         await SharedPreferences.getInstance();
-                                    await prefs.setString("token", res["token"]);
+                                    await prefs.setString(
+                                        "token", res["token"]);
                                     await prefs.setInt("id", res["id"]);
                                     await prefs.setString(
                                         "username", res["username"]);
                                     await prefs.setString(
                                         "nickname", res["nickname"]);
                                     if (mounted) {
-                                      Navigator.pop(context);
-                                      Navigator.push(
+                                      Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
                                           builder: (_) => const MainPage(),

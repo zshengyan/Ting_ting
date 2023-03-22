@@ -1,6 +1,9 @@
 import 'dart:ffi';
 
 import 'package:dio/dio.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ting/exception/exception_dispatcher.dart';
 import 'package:ting/model/basic_user_info.dart';
@@ -9,27 +12,58 @@ import '../pages/register_page.dart';
 import '../pages/register_page2.dart';
 import '../pages/secret_qu_page.dart';
 
-class AuthService {
-  static const baseURL = "http://twt.subit.org.cn";
+const baseURL = "http://twt.subit.org.cn";
 
+class AuthService {
   static final Dio dio = Dio(BaseOptions(baseUrl: baseURL));
 
-  static Future register() async {
-    var response = (await dio.post("/auth/register", data: {
-      "username": newUser,
-      "password": newPass,
-      "nickname": nickName,
-      "securityQuestion": securityQuestion,
-      "securityAnswer": securityAnswer,
-    }))
-        .data;
-    print(response.toString());
-    if (response["code"] == 10000) {
-      print(response["code"]);
-      // (await SharedPreferences.getInstance()).setString("username", newUser);
-      // userInfo.newUser = newUser;
-      // (await SharedPreferences.getInstance()).setString("nickname", nickName);
-      // userInfo.nickname = nickName;
+  static Future<bool> register(String usr, String pwd, String nickname,
+      String question, String ans) async {
+    try {
+      var response = (await dio.post("/auth/register", data: {
+        "username": usr,
+        "password": pwd,
+        "nickname": nickname,
+        "securityAnswer": ans,
+        "securityQuestion": question
+      }))
+          .data;
+      if (response["code"] != 10000) {
+        ExceptionDispatcher.dispatcher(response["code"]).alert();
+        return false;
+      }
+      return true;
+    } catch (e) {
+      Fluttertoast.showToast(msg: "Unknown Error");
+      return false;
+    }
+  }
+
+  static Future<bool> updateImage(XFile file, String token) async {
+    try {
+      var bytes = await file.readAsBytes();
+      var multipartFile = MultipartFile.fromBytes(
+        bytes,
+        filename: file.name,
+      );
+      var formData = FormData.fromMap({
+        'file': multipartFile,
+      });
+      var response = (await dio.post('/info/uploadAvatar',
+              data: formData,
+              options: Options(headers: {
+                "Authorization": "Bearer $token",
+              })))
+          .data;
+      if (response["code"] != 10000) {
+        ExceptionDispatcher.dispatcher(response["code"]).alert();
+        return false;
+      }
+      return true;
+    } catch (e) {
+      Fluttertoast.showToast(msg: "Unknown Error $e");
+      print(e);
+      return false;
     }
   }
 
@@ -48,6 +82,7 @@ class AuthService {
 
   static Future<bool> checkLogin() async {
     var pref = await SharedPreferences.getInstance();
+    GetStorage().write("id", pref.get("id"));
     try {
       await dio.get("/info/1",
           options: Options(headers: {

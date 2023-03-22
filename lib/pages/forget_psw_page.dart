@@ -211,8 +211,8 @@ class _ForgetpawPageState extends State<ForgetpawPage> {
                                     if (!res) return;
                                     Fluttertoast.showToast(msg: "重置成功");
                                     if (!mounted) return;
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
+                                    Navigator.pushNamedAndRemoveUntil(
+                                        context, "login", (route) => false);
                                   },
                                   style: TextButton.styleFrom(
                                     foregroundColor: Colors.black,
