@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ting/components/ChangeNickname.dart';
 import 'package:ting/components/Collection.dart';
 import 'package:ting/components/PersonalAudio.dart';
 import 'package:dio/dio.dart';
 import 'package:ting/service/api_service.dart';
+import 'package:ting/service/auth_service.dart';
 
 class Personal extends StatefulWidget {
   const Personal({super.key});
@@ -15,6 +20,98 @@ class Personal extends StatefulWidget {
 
 class _PersonalState extends State<Personal> {
   Dio dio = Dio();
+  final picker = ImagePicker();
+  XFile? _avatarNew;
+
+  Future<void> selectFile(ImageSource source) async {
+    final file = await picker.pickImage(source: source);
+    if (file != null) {
+      final croppedFile = await ImageCropper().cropImage(
+        sourcePath: file.path,
+        aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
+        compressQuality: 100,
+        maxWidth: 800,
+        maxHeight: 800,
+        compressFormat: ImageCompressFormat.jpg,
+      );
+      setState(() {
+        _avatarNew = XFile(croppedFile!.path);
+      });
+      Fluttertoast.showToast(msg: "更新中");
+      await AuthService.updateImage(_avatarNew!, GetStorage().read("token"));
+      await _initAvatar();
+      var f = _avatar;
+      setState(() {
+        _avatar = "";
+      });
+      Fluttertoast.showToast(msg: "更新完成");
+      setState(() {
+        _avatar = f;
+      });
+    }
+  }
+
+  void _chooseImage() async {
+    Widget cameraButton = TextButton(
+      style:
+          ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blue)),
+      child: const Text(
+        "相机",
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 20,
+        ),
+      ),
+      onPressed: () async {
+        await selectFile(ImageSource.camera);
+        if (mounted) {
+          Navigator.of(context).pop();
+        }
+      },
+    );
+
+    Widget galleryButton = TextButton(
+      style:
+          ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blue)),
+      child: const Text(
+        "相册",
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 20,
+        ),
+      ),
+      onPressed: () async {
+        await selectFile(ImageSource.gallery);
+        if (mounted) {
+          Navigator.of(context).pop();
+        }
+      },
+    );
+    AlertDialog alert = AlertDialog(
+      actions: [
+        Row(
+          children: [
+            Expanded(
+              flex: 2,
+              child: cameraButton,
+            ),
+            const Expanded(flex: 1, child: SizedBox()),
+            Expanded(
+              flex: 2,
+              child: galleryButton,
+            ),
+          ],
+        ),
+      ],
+    );
+    // 显示AlertDialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 
   void _getData() async {
     var url = "www.baidu.com";
@@ -23,11 +120,22 @@ class _PersonalState extends State<Personal> {
   }
 
   String _nickname = "";
+  String _avatar = "";
 
   @override
   void initState() {
     super.initState();
     _initNickname();
+    _initAvatar();
+  }
+
+  Future<void> _initAvatar() async {
+    var api = ApiService.instance;
+    var path = await api.getAvatarPath();
+    if (path == null) return;
+    setState(() {
+      _avatar = "$baseURL/assets/avatar/$path";
+    });
   }
 
   void _initNickname() async {
@@ -50,7 +158,7 @@ class _PersonalState extends State<Personal> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              height: 69,
+              height: 19,
             ), //纯纯的占位符
             const Align(
               alignment: FractionalOffset(212 / 430, 69 / 932),
@@ -86,9 +194,14 @@ class _PersonalState extends State<Personal> {
                       ),
                       height: 150,
                       width: 150,
-                      child: const Image(
-                        image: AssetImage('img/user.png'),
-                      ),
+                      child: _avatar != ""
+                          ? ClipOval(
+                              child: Image.network(
+                              "$_avatar?${DateTime.now().millisecondsSinceEpoch}",
+                            ))
+                          : const Image(
+                              image: AssetImage('img/user.png'),
+                            ),
                     ),
                   ),
                 ),
@@ -100,10 +213,7 @@ class _PersonalState extends State<Personal> {
                     style: ButtonStyle(
                       padding: MaterialStateProperty.all(EdgeInsets.zero),
                     ),
-                    onPressed: () {
-                      //按下拍摄新头像
-                      _getData();
-                    },
+                    onPressed: _chooseImage,
                     child: const SizedBox(
                       height: 150,
                       width: 150,
@@ -135,12 +245,14 @@ class _PersonalState extends State<Personal> {
                       color: Color(0xFFF5F5F5),
                       borderRadius: BorderRadius.all(Radius.circular(20.0)),
                     ),
-                    child: Text(
-                      _nickname,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 24,
-                        color: Color(0xFF303030),
+                    child: Center(
+                      child: Text(
+                        _nickname,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 24,
+                          color: Color(0xFF303030),
+                        ),
                       ),
                     ),
                   ),

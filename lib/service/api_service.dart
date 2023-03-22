@@ -37,4 +37,17 @@ class ApiService {
       return null;
     }
   }
+
+  Future<String?> getAvatarPath() async {
+    try {
+      var response = (await dio.get("/info/avatar")).data;
+      if (response["code"] != 10000) {
+        ExceptionDispatcher.dispatcher(response["code"]).alert();
+        return null;
+      }
+      return response["data"];
+    } catch (e) {
+      return null;
+    }
+  }
 }

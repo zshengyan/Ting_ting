@@ -83,6 +83,7 @@ class AuthService {
   static Future<bool> checkLogin() async {
     var pref = await SharedPreferences.getInstance();
     GetStorage().write("id", pref.get("id"));
+    GetStorage().write("token", pref.get("token"));
     try {
       await dio.get("/info/1",
           options: Options(headers: {
