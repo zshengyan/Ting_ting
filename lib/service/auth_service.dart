@@ -12,8 +12,8 @@ import '../pages/register_page.dart';
 import '../pages/register_page2.dart';
 import '../pages/secret_qu_page.dart';
 
-// const baseURL = "http://twt.subit.org.cn";
-const baseURL = "http://10.0.2.2:8080";
+const baseURL = "http://twt.subit.org.cn";
+// const baseURL = "http://10.0.2.2:8080";
 
 class AuthService {
   static final Dio dio = Dio(BaseOptions(baseUrl: baseURL));
