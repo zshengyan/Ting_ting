@@ -46,6 +46,33 @@ class ApiService {
     }
   }
 
+  Future<List<Friend>?> getFriendRequest() async {
+    try {
+      var response = (await dio.get("/friend/request")).data;
+      if (response["code"] != 10000) {
+        ExceptionDispatcher.dispatcher(response["code"]).alert();
+        return null;
+      }
+      return (response["data"] as List<dynamic>).map((e) => Friend.fromJson(e)).toList();
+    } catch (e) {
+      return null;
+    }
+  }
+
+
+  Future<List<Friend>?> getFriendList() async {
+    try {
+      var response = (await dio.get("/friend/list")).data;
+      if (response["code"] != 10000) {
+        ExceptionDispatcher.dispatcher(response["code"]).alert();
+        return null;
+      }
+      return (response["data"] as List<dynamic>).map((e) => Friend.fromJson(e)).toList();
+    } catch (e) {
+      return null;
+    }
+  }
+
   Future<String?> getUserInfo(String filed) async {
     try {
       var response = (await dio.get("/info/$filed")).data;
@@ -102,6 +129,22 @@ class ApiService {
     }
   }
 
+  Future<bool> acceptRequest(int id) async {
+    try {
+      var response = (await dio.post("/friend/acceptRequest", data: {
+        "id": id,
+      }))
+          .data;
+      if (response["code"] != 10000) {
+        ExceptionDispatcher.dispatcher(response["code"]).alert();
+        return false;
+      }
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   Future<List<Msg>?> mineVoice() async {
     try {
       var response = (await dio.get("/message/mine")).data;
@@ -118,6 +161,19 @@ class ApiService {
   Future<bool> deleteMessage(String id) async {
     try {
       var response = (await dio.post("/message/delete", data: {"id": id})).data;
+      if (response["code"] != 10000) {
+        ExceptionDispatcher.dispatcher(response["code"]).alert();
+        return false;
+      }
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> deleteFriend(int id) async {
+    try {
+      var response = (await dio.post("/friend/remove", data: {"id": id})).data;
       if (response["code"] != 10000) {
         ExceptionDispatcher.dispatcher(response["code"]).alert();
         return false;

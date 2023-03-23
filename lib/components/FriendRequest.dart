@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ting/components/FriendColumn.dart';
-
-List<String> litems = ['用户1','用户2','用户3','用户4','用户5','用户6','用户7','用户8','用户9','用户10'];
+import 'package:ting/components/SearchFriend.dart';
+import 'package:ting/service/api_service.dart';
+import 'package:ting/service/auth_service.dart';
 
 class FriendRequest extends StatefulWidget {
   const FriendRequest({super.key});
+
   @override
   State<FriendRequest> createState() => _FriendRequestState();
 }
@@ -12,156 +15,175 @@ class FriendRequest extends StatefulWidget {
 class _FriendRequestState extends State<FriendRequest> {
   final formkey = GlobalKey<FormState>();
 
+  List<Friend> _friendList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _updateRequest();
+  }
+
+  Future<void> _updateRequest() async {
+    var api = ApiService.instance;
+    var res = await api.getFriendRequest();
+    if (res == null) return;
+    setState(() {
+      _friendList = res;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: const Color(0xFF303030),
       resizeToAvoidBottomInset: false,
-      body: SingleChildScrollView(
-        reverse: true,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  height: 50,
-                  width: 50,
-                  margin: const EdgeInsets.fromLTRB(28, 28, 0, 0),
-                  decoration: const BoxDecoration(
-                    color: Color(0xFF303030),
-                    image: DecorationImage(
-                      image: AssetImage('img/arrowleft.png'),
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                  child: MaterialButton(
-                    onPressed: (){
-                      //回到FriendColumn
-                      Navigator.pop(context);
-                    },
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                height: 50,
+                width: 50,
+                margin: const EdgeInsets.fromLTRB(28, 28, 0, 0),
+                decoration: const BoxDecoration(
+                  color: Color(0xFF303030),
+                  image: DecorationImage(
+                    image: AssetImage('img/arrowleft.png'),
+                    fit: BoxFit.fill,
                   ),
                 ),
-              ],
-            ),
-            const Align(
-              alignment: FractionalOffset(212/430, 69/932),
-              child: (
-                  Text('Ting',
-                    style: TextStyle(
-                      fontFamily: 'Inter',
-                      fontSize: 40,
-                      fontWeight: FontWeight.w900,
-                      fontStyle: FontStyle.italic,
-                      color: Color(0xFFD2D2D2),
-                      height: 1.2,
-                    ),
-                  )
-              ),
-            ),
-            Container(
-              width: 120,
-              height: 40,
-              margin: const EdgeInsets.fromLTRB(30, 26, 0, 0),
-              child: const Text('好友申请',
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontSize: 30,
-                  fontWeight: FontWeight.w700,
-                  color: Color(0xFFFFFFFF),
+                child: MaterialButton(
+                  onPressed: () {
+                    //回到FriendColumn
+                    Navigator.pop(context);
+                  },
                 ),
               ),
-            ),
-            Container(
-              height: 506,
-              width: 374,
-              margin: const EdgeInsets.fromLTRB(28, 31, 28, 0),
-              decoration: const BoxDecoration(
-                  color: Color(0xFF303030)
+            ],
+          ),
+          const Align(
+            alignment: FractionalOffset(212 / 430, 69 / 932),
+            child: (Text(
+              'Ting',
+              style: TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 40,
+                fontWeight: FontWeight.w900,
+                fontStyle: FontStyle.italic,
+                color: Color(0xFFD2D2D2),
+                height: 1.2,
               ),
-              child: Expanded(
-                  child: ListView.builder(
-                      itemCount: litems.length,
-                      itemBuilder: (BuildContext ctxt, int Index) {
-                        return Column(
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                color: const Color(0xFF3E3E3E),
-                              ),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    width: 70,
-                                    height: 70,
-                                    decoration: BoxDecoration(
-                                        color: const Color(0xFFD2D2D2),
-                                        borderRadius: BorderRadius.circular(35),
-                                        image: const DecorationImage(
-                                            scale: 2,
-                                            image: AssetImage('img/user big.png')
-                                        )
-                                    ),
-                                  ),
-                                  Container(
-                                    width: 23.75,
-                                  ),
-                                  Text(
-                                    litems[Index],
-                                    style: const TextStyle(
-                                      fontSize: 24,
-                                      color: Color(0xFFFFEE8A),
-                                    ),
-                                  ),
-                                  MaterialButton(
-                                    onPressed: (){
-                                      //同意添加好友
-
-                                    },
-                                    child: Container(
-                                      width: 78,
-                                      height: 40,
-                                      margin: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(15),
-                                        color: const Color(0xFFFFEE8A),
-                                      ),
-                                      child: const Text(
-                                          '同意',
-                                          textAlign: TextAlign.center,
-                                          strutStyle: StrutStyle(
-                                            height: 2.5,
-                                            // 1.1更居中
-                                            forceStrutHeight: true, // 关键属性 强制改为文字高度
-                                          ),
-
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.w700,
-                                              color: Color(0xFF303030)
-                                          )
-                                      ),
-                                    ),
-                                  )
-                                ],
+            )),
+          ),
+          Container(
+            width: 120,
+            height: 40,
+            margin: const EdgeInsets.fromLTRB(30, 26, 0, 0),
+            child: const Text(
+              '好友申请',
+              style: TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 30,
+                fontWeight: FontWeight.w700,
+                color: Color(0xFFFFFFFF),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Visibility(
+              visible: _friendList.isNotEmpty,
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  await _updateRequest();
+                },
+                child: ListView.builder(
+                  itemCount: _friendList.length,
+                  itemBuilder: (ctx, index) {
+                    return Container(
+                      margin: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: NetworkImage("${baseURL}/assets/avatar/${_friendList[index].avatar}"),
                               ),
                             ),
-                            Container(
-                              height: 17,
-                            )
-                          ],
-                        );
-                      }
-                  )
+                          ),
+                          const SizedBox(width: 16),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                _friendList[index].nickname,
+                                style: const TextStyle(fontSize: 25),
+                              ),
+                              Text(
+                                "@${_friendList[index].username}",
+                                style: const TextStyle(fontSize: 15),
+                              ),
+                            ],
+                          ),
+                          const Spacer(),
+                          ElevatedButton(
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text("添加好友"),
+                                      content: Text("确定要添加好友吗？"),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          child: Text("取消"),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                        ElevatedButton(
+                                          child: Text("确定"),
+                                          onPressed: () async {
+                                            var api = ApiService.instance;
+                                            if (await api.acceptRequest(_friendList[index].id)) {
+                                              Fluttertoast.showToast(msg: "添加成功");
+                                              _updateRequest();
+                                            }
+                                            if (mounted) {
+                                              Navigator.of(context).pop();
+                                            }
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                shape: const CircleBorder(),
+                                padding: const EdgeInsets.all(10),
+                              ),
+                              child: const Icon(Icons.add)),
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
-
   }
 }
