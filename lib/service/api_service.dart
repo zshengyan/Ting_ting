@@ -105,13 +105,7 @@ class ApiService {
         ExceptionDispatcher.dispatcher(response["code"]).alert();
         return null;
       }
-      print(response["data"][0]);
-      return (response["data"] as List<dynamic>).map((e) {
-        print("ori: $e");
-        var t = Friend.fromJson(e);
-        print(t);
-        return t;
-      }).toList();
+      return (response["data"] as List<dynamic>).map((e) => Friend.fromJson(e)).toList();
     } catch (e) {
       return null;
     }
