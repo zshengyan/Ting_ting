@@ -1,6 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_sound/flutter_sound.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:ting/components/Personal.dart';
 import 'package:ting/pages/listen_friends_page.dart';
+import 'package:ting/permission/handler.dart';
 import 'package:ting/service/auth_service.dart';
 import '../components/FriendColumn.dart';
 
@@ -15,11 +20,22 @@ class _MainPageState extends State<MainPage> {
   late final String? nickname;
   late final String? avatar;
 
+  var maxLength = 10000;
+
   void _checkLogin() async {
     if (!await AuthService.checkLogin()) {
       Navigator.pushNamedAndRemoveUntil(context, "login", (route) => false);
     }
   }
+
+  final FlutterSoundRecorder _rec = FlutterSoundRecorder();
+
+  StreamSubscription? _recSub;
+
+  double _time = 0;
+
+  bool isRecord = false;
+  bool haveRecord = false;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +46,7 @@ class _MainPageState extends State<MainPage> {
       backgroundColor: Colors.white10,
       body: ListView(
         // crossAxisAlignment: CrossAxisAlignment.center,
-        //mainAxisAlignment: MainAxissAlignment.start,
+        // mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -41,8 +57,7 @@ class _MainPageState extends State<MainPage> {
                 iconSize: 40,
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
-                onPressed: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (context) {
+                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return const FriendColumn();
                 })),
               ),
@@ -62,17 +77,21 @@ class _MainPageState extends State<MainPage> {
           ),
           Container(
               width: w * 0.86,
-              height: 19,
+              height: 30,
               decoration: const BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(color: Color(0xFFFFE57F), width: 1.0)),
+                border: Border(bottom: BorderSide(color: Color(0xFFFFE57F), width: 1.0)),
               ),
               child: const Image(
                 image: AssetImage("img/Ting.png"),
                 alignment: Alignment.topCenter,
               )),
-          const SizedBox(
+          SizedBox(
             height: 320,
+            child: LinearProgressIndicator(
+              value: _time / 5.0, // 计算进度条的值（即进度百分比）
+              backgroundColor: Colors.white10, // 进度条背景色
+              valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFFFFE57F)), // 进度条颜色
+            ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -106,14 +125,72 @@ class _MainPageState extends State<MainPage> {
                     Radius.circular(45),
                   ),
                 ),
-                child: IconButton(
-                  icon: const Icon(Icons.play_arrow_sharp),
-                  iconSize: 78,
-                  color: const Color(0xFFFFE57F),
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  onPressed: () {},
-                ),
+                child: haveRecord
+                    ? IconButton(
+                        icon: const Icon(Icons.play_arrow),
+                        iconSize: 78,
+                        color: const Color(0xFFFFE57F),
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        onPressed: () async {},
+                      )
+                    : IconButton(
+                        icon: isRecord ? const Icon(Icons.stop) : const Icon(Icons.mic),
+                        iconSize: 78,
+                        color: const Color(0xFFFFE57F),
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        onPressed: () async {
+                          if (!isRecord) {
+                            await requestRecordPermission();
+                            var tempDir = await getTemporaryDirectory();
+                            var time = DateTime.now().millisecondsSinceEpoch;
+                            String path = '${tempDir.path}/$time${ext[Codec.aacADTS.index]}';
+                            print(path);
+                            await _rec.openRecorder();
+                            await _rec.startRecorder(
+                              toFile: path,
+                              codec: Codec.aacADTS,
+                              bitRate: 8000,
+                              numChannels: 1,
+                              sampleRate: 8000,
+                            );
+
+                            _recSub = _rec.onProgress!.listen((e) {
+                              var date = DateTime.fromMillisecondsSinceEpoch(
+                                e.duration.inMilliseconds,
+                                isUtc: true,
+                              );
+                              print(date);
+                              if (date.second >= 5) {
+                                _rec.stopRecorder();
+                                setState(() {
+                                  haveRecord = true;
+                                  isRecord = !isRecord;
+                                });
+                                return;
+                              }
+                              print("date");
+                              setState(() {
+                                _time = (date.second * 1000 + date.millisecond) / 1000.0;
+                              });
+                            });
+                            await _rec.setSubscriptionDuration(
+                              const Duration(milliseconds: 50),
+                            );
+                            setState(() {
+                              isRecord = !isRecord;
+                            });
+                          } else {
+                            _rec.stopRecorder();
+                            _rec.closeRecorder();
+                            setState(() {
+                              haveRecord = true;
+                              isRecord = !isRecord;
+                            });
+                          }
+                        },
+                      ),
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -122,15 +199,14 @@ class _MainPageState extends State<MainPage> {
                     width: 70,
                     height: 70,
                     child: IconButton(
-                      icon: const Image(
-                          image: AssetImage("img/change voice.png")),
+                      icon: const Image(image: AssetImage("img/change voice.png")),
                       splashColor: Colors.transparent,
                       //highlightColor: Colors.transparent,
                       onPressed: () {},
                     ),
                   ),
                   const Text(
-                    "变声",
+                    "重录",
                     style: TextStyle(fontSize: 18, color: Colors.white),
                   )
                 ],
@@ -152,15 +228,9 @@ class _MainPageState extends State<MainPage> {
                   height: 0,
                   decoration: const BoxDecoration(
                     border: Border(
-                      bottom: BorderSide(
-                          color: Color(0xFFFFE57F),
-                          width: 18,
-                          style: BorderStyle.solid),
+                      bottom: BorderSide(color: Color(0xFFFFE57F), width: 18, style: BorderStyle.solid),
                       right: BorderSide(width: 14, style: BorderStyle.solid),
-                      left: BorderSide(
-                          color: Color(0xFFFFE57F),
-                          width: 14,
-                          style: BorderStyle.solid),
+                      left: BorderSide(color: Color(0xFFFFE57F), width: 14, style: BorderStyle.solid),
                     ),
                   ),
                 ),
@@ -169,8 +239,7 @@ class _MainPageState extends State<MainPage> {
                   height: 10,
                   margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                   decoration: const BoxDecoration(
-                    border: Border(
-                        top: BorderSide(color: Color(0xFFFFE57F), width: 2.5)),
+                    border: Border(top: BorderSide(color: Color(0xFFFFE57F), width: 2.5)),
                   ),
                 ),
                 Container(
@@ -178,9 +247,7 @@ class _MainPageState extends State<MainPage> {
                   height: 0,
                   margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                   decoration: const BoxDecoration(
-                    border: Border(
-                        bottom:
-                            BorderSide(color: Color(0xFFFFE57F), width: 3.0)),
+                    border: Border(bottom: BorderSide(color: Color(0xFFFFE57F), width: 3.0)),
                   ),
                 ),
                 Row(

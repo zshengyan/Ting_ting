@@ -40,14 +40,7 @@ class _PersonalState extends State<Personal> {
       Fluttertoast.showToast(msg: "更新中");
       await AuthService.updateImage(_avatarNew!, GetStorage().read("token"));
       await _initAvatar();
-      var f = _avatar;
-      setState(() {
-        _avatar = "";
-      });
       Fluttertoast.showToast(msg: "更新完成");
-      setState(() {
-        _avatar = f;
-      });
     }
   }
 

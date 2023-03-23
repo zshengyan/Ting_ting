@@ -37,18 +37,14 @@ class _LoginPageState extends State<LoginPage> {
                 height: 100,
                 margin: const EdgeInsets.fromLTRB(16, 84, 0, 0),
                 decoration: const BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage("img/loginIcon.png"),
-                        fit: BoxFit.fill)),
+                    image: DecorationImage(image: AssetImage("img/loginIcon.png"), fit: BoxFit.fill)),
               ),
               Container(
                 width: 72,
                 height: 44,
                 margin: const EdgeInsets.fromLTRB(17, 14, 0, 0),
                 decoration: const BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage("img/logintitle.png"),
-                        fit: BoxFit.fill)),
+                    image: DecorationImage(image: AssetImage("img/logintitle.png"), fit: BoxFit.fill)),
               ),
               const SizedBox(
                 height: 14,
@@ -59,22 +55,11 @@ class _LoginPageState extends State<LoginPage> {
                 height: 20,
                 decoration: const BoxDecoration(
                     border: Border(
-                      bottom: BorderSide(
-                          color: Colors.white38,
-                          width: 13,
-                          style: BorderStyle.solid),
-                      right: BorderSide(
-                          color: Colors.transparent,
-                          width: 10,
-                          style: BorderStyle.solid),
-                      left: BorderSide(
-                          color: Colors.transparent,
-                          width: 10,
-                          style: BorderStyle.solid),
+                      bottom: BorderSide(color: Colors.white38, width: 13, style: BorderStyle.solid),
+                      right: BorderSide(color: Colors.transparent, width: 10, style: BorderStyle.solid),
+                      left: BorderSide(color: Colors.transparent, width: 10, style: BorderStyle.solid),
                     ),
-                    image: DecorationImage(
-                        image: AssetImage("img/triangle2.png"),
-                        fit: BoxFit.fill)),
+                    image: DecorationImage(image: AssetImage("img/triangle2.png"), fit: BoxFit.fill)),
               ),
               Container(
                 width: 380,
@@ -84,15 +69,13 @@ class _LoginPageState extends State<LoginPage> {
                 decoration: const BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(15.0)),
                     color: Colors.white38,
-                    image: DecorationImage(
-                        image: AssetImage("img/border.png"), fit: BoxFit.fill)),
+                    image: DecorationImage(image: AssetImage("img/border.png"), fit: BoxFit.fill)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
                       "Hello!",
-                      style:
-                          TextStyle(fontSize: 35, color: Colors.yellowAccent),
+                      style: TextStyle(fontSize: 35, color: Colors.yellowAccent),
                     ),
                     const SizedBox(
                       height: 20,
@@ -117,13 +100,9 @@ class _LoginPageState extends State<LoginPage> {
                       height: 52,
                       decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(30.0)),
+                          borderRadius: const BorderRadius.all(Radius.circular(30.0)),
                           boxShadow: [
-                            BoxShadow(
-                                blurRadius: 10,
-                                offset: const Offset(1, 1),
-                                color: Colors.white.withOpacity(0.6))
+                            BoxShadow(blurRadius: 10, offset: const Offset(1, 1), color: Colors.white.withOpacity(0.6))
                           ]),
                       child: TextField(
                         controller: _username,
@@ -132,11 +111,9 @@ class _LoginPageState extends State<LoginPage> {
                         decoration: const InputDecoration(
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.white),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(30))),
+                                borderRadius: BorderRadius.all(Radius.circular(30))),
                             enabledBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(30)),
+                                borderRadius: BorderRadius.all(Radius.circular(30)),
                                 borderSide: BorderSide(
                                   color: Colors.white38,
                                 )),
@@ -164,13 +141,9 @@ class _LoginPageState extends State<LoginPage> {
                       height: 50,
                       decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(30.0)),
+                          borderRadius: const BorderRadius.all(Radius.circular(30.0)),
                           boxShadow: [
-                            BoxShadow(
-                                blurRadius: 10,
-                                offset: const Offset(1, 1),
-                                color: Colors.white.withOpacity(0.6))
+                            BoxShadow(blurRadius: 10, offset: const Offset(1, 1), color: Colors.white.withOpacity(0.6))
                           ]),
                       child: TextField(
                         controller: _password,
@@ -180,11 +153,9 @@ class _LoginPageState extends State<LoginPage> {
                         decoration: const InputDecoration(
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.white),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(30))),
+                                borderRadius: BorderRadius.all(Radius.circular(30))),
                             enabledBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(30)),
+                                borderRadius: BorderRadius.all(Radius.circular(30)),
                                 borderSide: BorderSide(
                                   color: Colors.white38,
                                 )),
@@ -200,29 +171,24 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(
                       height: 10,
                     ),
-                    RichText(
-                      text: TextSpan(
-                          text: "<忘记密码？",
-                          style: const TextStyle(
-                              fontSize: 15, color: Colors.white),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap =
-                                () => Get.to(() => const ForgetpawUsrPage()),
-                          children: [
-                            const TextSpan(
-                              text: "                                   ",
-                              style: TextStyle(
-                                fontSize: 20,
-                              ),
-                            ),
-                            TextSpan(
-                                text: "注册>",
-                                style: const TextStyle(
-                                    fontSize: 15, color: Colors.white),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap =
-                                      () => Get.to(() => const RegisterPage()))
-                          ]),
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () => Get.to(() => const ForgetpawUsrPage()),
+                          child: const Text(
+                            "<忘记密码？",
+                            style: const TextStyle(fontSize: 15, color: Colors.white),
+                          ),
+                        ),
+                        const Expanded(child: SizedBox()),
+                        GestureDetector(
+                          onTap: () => Get.to(() => const RegisterPage()),
+                          child: const Text(
+                            "注册>",
+                            style: TextStyle(fontSize: 15, color: Colors.white),
+                          ),
+                        )
+                      ],
                     ),
                     const SizedBox(
                       height: 20,
@@ -242,31 +208,24 @@ class _LoginPageState extends State<LoginPage> {
                               children: [
                                 Positioned.fill(
                                   child: Container(
-                                    decoration: const BoxDecoration(
-                                        color: Color(0xFFFFE57F)),
+                                    decoration: const BoxDecoration(color: Color(0xFFFFE57F)),
                                   ),
                                 ),
                                 TextButton(
                                   onPressed: () async {
-                                    if (_username.text == "" ||
-                                        _password.text == "") {
+                                    if (_username.text == "" || _password.text == "") {
                                       Fluttertoast.showToast(msg: "用户名或密码不可为空");
                                       return;
                                     }
-                                    var res = await AuthService.login(
-                                        _username.text, _password.text);
+                                    var res = await AuthService.login(_username.text, _password.text);
                                     if (res == null) return;
                                     _username.text = _password.text = "";
                                     print(res);
-                                    var prefs =
-                                        await SharedPreferences.getInstance();
-                                    await prefs.setString(
-                                        "token", res["token"]);
+                                    var prefs = await SharedPreferences.getInstance();
+                                    await prefs.setString("token", res["token"]);
                                     await prefs.setInt("id", res["id"]);
-                                    await prefs.setString(
-                                        "username", res["username"]);
-                                    await prefs.setString(
-                                        "nickname", res["nickname"]);
+                                    await prefs.setString("username", res["username"]);
+                                    await prefs.setString("nickname", res["nickname"]);
                                     if (mounted) {
                                       Navigator.pushReplacement(
                                         context,
@@ -277,8 +236,7 @@ class _LoginPageState extends State<LoginPage> {
                                     }
                                   },
                                   style: TextButton.styleFrom(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(35, 7, 36, 8),
+                                    padding: const EdgeInsets.fromLTRB(35, 7, 36, 8),
                                     foregroundColor: Colors.black,
                                     textStyle: const TextStyle(
                                       fontSize: 20,

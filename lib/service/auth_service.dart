@@ -17,8 +17,7 @@ const baseURL = "http://twt.subit.org.cn";
 class AuthService {
   static final Dio dio = Dio(BaseOptions(baseUrl: baseURL));
 
-  static Future<bool> register(String usr, String pwd, String nickname,
-      String question, String ans) async {
+  static Future<bool> register(String usr, String pwd, String nickname, String question, String ans) async {
     try {
       var response = (await dio.post("/auth/register", data: {
         "username": usr,
@@ -84,13 +83,15 @@ class AuthService {
     var pref = await SharedPreferences.getInstance();
     GetStorage().write("id", pref.get("id"));
     GetStorage().write("token", pref.get("token"));
+    if (pref.getString("token") == null) return false;
     try {
-      await dio.get("/info/1",
+      var res = await dio.get("/info/1",
           options: Options(headers: {
             "Authorization": "Bearer ${pref.getString("token") ?? ""}",
           }));
       return true;
     } catch (error) {
+      print(error);
       return false;
     }
   }
@@ -104,8 +105,7 @@ class AuthService {
     return response["data"]["question"];
   }
 
-  static Future<bool> resetPasswordBySecurity(
-      String usr, String pwd, String ans) async {
+  static Future<bool> resetPasswordBySecurity(String usr, String pwd, String ans) async {
     var response = (await dio.post("/auth/forgetPassword/$usr", data: {
       "answer": ans,
       "newPassword": pwd,

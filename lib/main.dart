@@ -25,10 +25,20 @@ class MyApp extends StatelessWidget {
         future: getUserInfo(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const SizedBox(
-              width: 0,
-              height: 0,
-            );
+            return const MaterialApp(
+                home: Scaffold(
+              backgroundColor: Colors.black,
+              body: Center(
+                child: Text(
+                  "Loading",
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ));
           } else if (snapshot.connectionState == ConnectionState.done) {
             return GetMaterialApp(
               routes: RegisteredRouter.routers,

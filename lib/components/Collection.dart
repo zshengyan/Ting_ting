@@ -117,7 +117,7 @@ class _CollectionState extends State<Collection> {
                                               borderRadius: BorderRadius.circular(55),
                                               color: Color(0xFFD2D2D2)
                                           ),
-                                          child: Center(
+                                          child: const Center(
                                             child: Image(
                                               image: AssetImage('pictures/user.png'),
                                               width: 40,
