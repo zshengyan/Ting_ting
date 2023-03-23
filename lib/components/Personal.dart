@@ -106,11 +106,7 @@ class _PersonalState extends State<Personal> {
     );
   }
 
-  void _getData() async {
-    var url = "www.baidu.com";
-    Response result = await Dio().get(url);
-    print(result.data);
-  }
+
 
   String _nickname = "";
   String _avatar = "";

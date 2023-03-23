@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_sound/flutter_sound.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:ting/components/Personal.dart';
 import 'package:ting/pages/listen_friends_page.dart';
+import 'package:ting/pages/send_page.dart';
 import 'package:ting/permission/handler.dart';
 import 'package:ting/service/auth_service.dart';
 import '../components/FriendColumn.dart';
@@ -20,7 +22,7 @@ class _MainPageState extends State<MainPage> {
   late final String? nickname;
   late final String? avatar;
 
-  var maxLength = 10000;
+  var maxLength = 5;
 
   void _checkLogin() async {
     if (!await AuthService.checkLogin()) {
@@ -34,12 +36,24 @@ class _MainPageState extends State<MainPage> {
 
   double _time = 0;
 
+  final _player = FlutterSoundPlayer();
+  String? _path;
+
   bool isRecord = false;
   bool haveRecord = false;
 
+  bool isPublic = true;
+
+  bool isPlay = false;
+
+  void _switch() {
+    setState(() {
+      isPublic = !isPublic;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    _checkLogin();
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -81,41 +95,86 @@ class _MainPageState extends State<MainPage> {
               decoration: const BoxDecoration(
                 border: Border(bottom: BorderSide(color: Color(0xFFFFE57F), width: 1.0)),
               ),
-              child: const Image(
-                image: AssetImage("img/Ting.png"),
-                alignment: Alignment.topCenter,
+              child: GestureDetector(
+                onTap: () async {
+                  if (_path == null) {
+                    Fluttertoast.showToast(msg: "发送推文不可为空");
+                    return;
+                  }
+                  if (isPublic) {
+                    await Navigator.push(context, MaterialPageRoute(builder: (_) => SendPage(path: _path!)));
+                  } else {
+                    Fluttertoast.showToast(msg: "仍在开发中");
+                  }
+                  setState(() {
+                    haveRecord = false;
+                    _time = 0;
+                    _path = null;
+                    isRecord = false;
+                    maxLength = 5;
+                    isPlay = false;
+                  });
+                },
+                child: const Image(
+                  image: AssetImage("img/Ting.png"),
+                  alignment: Alignment.topCenter,
+                ),
               )),
-          SizedBox(
+          Container(
             height: 320,
-            child: LinearProgressIndicator(
-              value: _time / 5.0, // 计算进度条的值（即进度百分比）
-              backgroundColor: Colors.white10, // 进度条背景色
-              valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFFFFE57F)), // 进度条颜色
+            padding: const EdgeInsets.all(30),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: LinearProgressIndicator(
+                value: _time / maxLength, // 计算进度条的值（即进度百分比）
+                backgroundColor: Colors.white10, // 进度条背景色
+                valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFFFFE57F)), // 进度条颜色
+              ),
             ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 80,
-                    height: 80,
-                    child: IconButton(
-                      icon: const Image(image: AssetImage("img/whisper.png")),
-                      splashColor: Colors.transparent,
-                      //highlightColor: Colors.transparent,
-                      onPressed: () {},
+              !isPublic
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 80,
+                          height: 80,
+                          child: IconButton(
+                            icon: const Image(image: AssetImage("img/whisper.png")),
+                            splashColor: Colors.transparent,
+                            //highlightColor: Colors.transparent,
+                            onPressed: _switch,
+                          ),
+                        ),
+                        const Text(
+                          "悄悄话",
+                          style: TextStyle(fontSize: 18, color: Colors.white),
+                        )
+                      ],
+                    )
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 80,
+                          height: 80,
+                          child: IconButton(
+                            icon: const Image(image: AssetImage("img/friend.png")),
+                            splashColor: Colors.transparent,
+                            //highlightColor: Colors.transparent,
+                            onPressed: _switch,
+                          ),
+                        ),
+                        const Text(
+                          "公开",
+                          style: TextStyle(fontSize: 18, color: Colors.white),
+                        )
+                      ],
                     ),
-                  ),
-                  const Text(
-                    "悄悄话",
-                    style: TextStyle(fontSize: 18, color: Colors.white),
-                  )
-                ],
-              ),
               Container(
                 width: 90,
                 height: 90,
@@ -127,12 +186,42 @@ class _MainPageState extends State<MainPage> {
                 ),
                 child: haveRecord
                     ? IconButton(
-                        icon: const Icon(Icons.play_arrow),
+                        icon: isPlay ? const Icon(Icons.stop) : const Icon(Icons.play_arrow),
                         iconSize: 78,
                         color: const Color(0xFFFFE57F),
                         splashColor: Colors.transparent,
                         highlightColor: Colors.transparent,
-                        onPressed: () async {},
+                        onPressed: () async {
+                          if (!isPlay) {
+                            await _player.openPlayer();
+                            await _player.startPlayer(
+                              fromURI: _path,
+                            );
+                            _player.onProgress!.listen((e) async {
+                              var date = DateTime.fromMillisecondsSinceEpoch(
+                                e.position.inMilliseconds,
+                                isUtc: true,
+                              );
+                              setState(() {
+                                _time = (date.second * 1000 + date.millisecond) / 1000.0;
+                              });
+                              if (_player.playerState == PlayerState.isStopped) {
+                                await _player.stopPlayer();
+                                await _player.closePlayer();
+                                setState(() {
+                                  isPlay = false;
+                                });
+                              }
+                            });
+                            _player.setSubscriptionDuration(const Duration(milliseconds: 1));
+                          } else {
+                            await _player.stopPlayer();
+                            await _player.closePlayer();
+                          }
+                          setState(() {
+                            isPlay = !isPlay;
+                          });
+                        },
                       )
                     : IconButton(
                         icon: isRecord ? const Icon(Icons.stop) : const Icon(Icons.mic),
@@ -145,11 +234,10 @@ class _MainPageState extends State<MainPage> {
                             await requestRecordPermission();
                             var tempDir = await getTemporaryDirectory();
                             var time = DateTime.now().millisecondsSinceEpoch;
-                            String path = '${tempDir.path}/$time${ext[Codec.aacADTS.index]}';
-                            print(path);
+                            _path = '${tempDir.path}/temp${ext[Codec.aacADTS.index]}';
                             await _rec.openRecorder();
                             await _rec.startRecorder(
-                              toFile: path,
+                              toFile: _path,
                               codec: Codec.aacADTS,
                               bitRate: 8000,
                               numChannels: 1,
@@ -162,7 +250,7 @@ class _MainPageState extends State<MainPage> {
                                 isUtc: true,
                               );
                               print(date);
-                              if (date.second >= 5) {
+                              if (date.second >= maxLength) {
                                 _rec.stopRecorder();
                                 setState(() {
                                   haveRecord = true;
@@ -202,7 +290,16 @@ class _MainPageState extends State<MainPage> {
                       icon: const Image(image: AssetImage("img/change voice.png")),
                       splashColor: Colors.transparent,
                       //highlightColor: Colors.transparent,
-                      onPressed: () {},
+                      onPressed: () {
+                        setState(() {
+                          haveRecord = false;
+                          _time = 0;
+                          _path = null;
+                          isRecord = false;
+                          maxLength = 5;
+                          isPlay = false;
+                        });
+                      },
                     ),
                   ),
                   const Text(
