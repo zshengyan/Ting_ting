@@ -59,7 +59,6 @@ class ApiService {
     }
   }
 
-
   Future<List<Friend>?> getFriendList() async {
     try {
       var response = (await dio.get("/friend/list")).data;
@@ -106,7 +105,13 @@ class ApiService {
         ExceptionDispatcher.dispatcher(response["code"]).alert();
         return null;
       }
-      return (response["data"] as List<dynamic>).map((e) => Friend.fromJson(e)).toList();
+      print(response["data"][0]);
+      return (response["data"] as List<dynamic>).map((e) {
+        print("ori: $e");
+        var t = Friend.fromJson(e);
+        print(t);
+        return t;
+      }).toList();
     } catch (e) {
       return null;
     }

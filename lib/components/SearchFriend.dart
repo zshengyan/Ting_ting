@@ -29,7 +29,7 @@ class Friend {
         json['id'],
         json['username'],
         json['nickname'],
-        json['avatar'],
+        json['avatar'] ?? "default.png",
       );
 }
 
@@ -45,9 +45,9 @@ class _SearchFriendState extends State<SearchFriend> {
   Future<void> _freshList() async {
     var api = ApiService.instance;
     var res = await api.searchFriend(_account.text);
-    if (res == null) return;
+    print(res);
     setState(() {
-      _friendList = res;
+      _friendList = res ?? [];
       _searched = true;
     });
   }
