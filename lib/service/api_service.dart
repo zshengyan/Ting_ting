@@ -26,6 +26,20 @@ class ApiService {
 
   static ApiService get instance => _singleton;
 
+  Future<bool?> setNickname(String nickname) async {
+    try {
+      var response = (await dio.post("/info/nickname/$nickname")).data;
+      print(response);
+      if (response["code"] != 10000) {
+        ExceptionDispatcher.dispatcher(response["code"]).alert();
+        return null;
+      }
+      return true;
+    } catch (e) {
+      return null;
+    }
+  }
+
   Future<bool> sendFile(String path, String desc) async {
     try {
       var formData = FormData.fromMap({
@@ -68,6 +82,19 @@ class ApiService {
         return null;
       }
       return (response["data"] as List<dynamic>).map((e) => Friend.fromJson(e)).toList();
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<String?> getNickName() async {
+    try {
+      var response = (await dio.get("/info/nickname/update")).data;
+      if (response["code"] != 10000) {
+        ExceptionDispatcher.dispatcher(response["code"]).alert();
+        return null;
+      }
+      return response["data"];
     } catch (e) {
       return null;
     }

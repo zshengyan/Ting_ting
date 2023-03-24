@@ -6,11 +6,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ting/exception/exception_dispatcher.dart';
-import 'package:ting/model/basic_user_info.dart';
-import '../pages/login_page.dart';
-import '../pages/register_page.dart';
-import '../pages/register_page2.dart';
-import '../pages/secret_qu_page.dart';
 
 const baseURL = "http://twt.subit.org.cn";
 // const baseURL = "http://10.0.2.2:8080";

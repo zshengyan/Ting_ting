@@ -46,6 +46,8 @@ class ListenPage extends StatefulWidget {
   State<ListenPage> createState() => _ListenPageState();
 }
 
+ScrollController _scrollController = ScrollController();
+
 class _ListenPageState extends State<ListenPage> {
   @override
   Widget build(BuildContext context) {
@@ -53,76 +55,87 @@ class _ListenPageState extends State<ListenPage> {
     double h = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Colors.white10,
-      body: ListView(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              GestureDetector(
-                onTap: () {},
-                child: Container(
-                    width: 55,
-                    height: 40,
-                    margin: const EdgeInsets.fromLTRB(54, 40, 0, 0),
-                    padding: const EdgeInsets.only(bottom: 5),
-                    decoration: const BoxDecoration(
-                      border: Border(bottom: BorderSide(color: Color(0xFFFFE57F), width: 2.0)),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Text(
-                          "朋友",
-                          style: TextStyle(fontSize: 24, color: Color(0xFFFFE57F)),
-                        ),
-                      ],
-                    )),
+      body: SizedBox(
+        height: double.infinity,
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                GestureDetector(
+                  onTap: () {},
+                  child: Container(
+                      width: 55,
+                      height: 40,
+                      margin: const EdgeInsets.fromLTRB(54, 40, 0, 0),
+                      padding: const EdgeInsets.only(bottom: 5),
+                      decoration: const BoxDecoration(
+                        border: Border(bottom: BorderSide(color: Color(0xFFFFE57F), width: 2.0)),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Text(
+                            "朋友",
+                            style: TextStyle(fontSize: 24, color: Color(0xFFFFE57F)),
+                          ),
+                        ],
+                      )),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Container(
+                      height: 50,
+                      width: 50,
+                      margin: const EdgeInsets.only(top: 50),
+                      child: const Icon(
+                        Icons.keyboard_double_arrow_down_sharp,
+                        size: 50,
+                        color: Color(0xFFFFE57F),
+                      )),
+                ),
+                GestureDetector(
+                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return const WhisperPage();
+                  })),
+                  child: Container(
+                      width: 80,
+                      height: 35,
+                      margin: const EdgeInsets.fromLTRB(0, 40, 50, 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Text(
+                            "悄悄话",
+                            style: TextStyle(fontSize: 24, color: Colors.grey),
+                          ),
+                        ],
+                      )),
+                ),
+              ],
+            ),
+            Expanded(
+              child: RefreshIndicator(
+                onRefresh: _refreshMessage,
+                child: ListView(
+                  controller: _scrollController,
+                  children: _msgList
+                      .map((e) => TweetCard(
+                            id: e.id,
+                            title: e.title,
+                            nickname: e.nickname,
+                            avatarUrl: e.avatarUrl,
+                            audioPath: e.audioPath,
+                          ))
+                      .toList(),
+                ),
               ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: Container(
-                    height: 50,
-                    width: 50,
-                    margin: const EdgeInsets.only(top: 50),
-                    child: const Icon(
-                      Icons.keyboard_double_arrow_down_sharp,
-                      size: 50,
-                      color: Color(0xFFFFE57F),
-                    )),
-              ),
-              GestureDetector(
-                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return const WhisperPage();
-                })),
-                child: Container(
-                    width: 80,
-                    height: 35,
-                    margin: const EdgeInsets.fromLTRB(0, 40, 50, 0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Text(
-                          "悄悄话",
-                          style: TextStyle(fontSize: 24, color: Colors.grey),
-                        ),
-                      ],
-                    )),
-              ),
-            ],
-          ),
-          ..._msgList
-              .map((e) => TweetCard(
-                    id: e.id,
-                    title: e.title,
-                    nickname: e.nickname,
-                    avatarUrl: e.avatarUrl,
-                    audioPath: e.audioPath,
-                  ))
-              .toList(),
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
@@ -131,6 +144,13 @@ class _ListenPageState extends State<ListenPage> {
   void initState() {
     super.initState();
     _refreshMessage();
+    _scrollController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      _append();
+    }
   }
 
   int page = 0;
@@ -138,12 +158,21 @@ class _ListenPageState extends State<ListenPage> {
   List<Message> _msgList = [];
 
   Future<void> _refreshMessage() async {
-    print("ggg");
+    page = 0;
     var api = ApiService.instance;
-    var res = await api.getList(page);
-    print(res);
+    var res = await api.getList(0);
     setState(() {
       _msgList = res ?? [];
+    });
+  }
+
+  Future<void> _append() async {
+    print("append $page");
+    var api = ApiService.instance;
+    var res = await api.getList(++page);
+    if (res == [] || res == null) page--;
+    setState(() {
+      _msgList.addAll(res ?? []);
     });
   }
 }

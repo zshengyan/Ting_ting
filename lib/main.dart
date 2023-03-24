@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:ting/components/PersonalAudio.dart';
-import 'package:ting/components/SearchFriend.dart';
-import 'package:ting/pages/listen_friends_page.dart';
 import 'package:ting/pages/login_page.dart';
 import 'package:ting/pages/main_page.dart';
-import 'package:ting/pages/register_page.dart';
-import 'package:ting/pages/register_page2.dart';
-import 'package:ting/pages/send_page.dart';
 import 'package:ting/router/router.dart';
 import 'package:ting/service/auth_service.dart';
 
