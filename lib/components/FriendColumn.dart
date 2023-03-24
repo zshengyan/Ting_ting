@@ -3,16 +3,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ting/components/FriendRequest.dart';
 import 'package:ting/components/SearchFriend.dart';
 import 'package:ting/pages/main_page.dart';
-import 'package:ting/service/NetworkManager.dart';
 import 'package:ting/components/menu.dart';
 import 'package:ting/components/popmenu.dart';
 import 'package:ting/service/api_service.dart';
 import 'package:ting/service/auth_service.dart';
-
-List<String> litems = ['用户1', '用户2', '用户3', '用户4', '用户5', '用户6', '用户7', '用户8', '用户9', '用户10'];
-List<String>? FriendName;
-List<String>? FriendIcon;
-var fl = LYFHttpRequest.getFriendList();
 
 class FriendColumn extends StatefulWidget {
   const FriendColumn({super.key});

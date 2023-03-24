@@ -195,8 +195,14 @@ class _MainPageState extends State<MainPage> {
                           if (!isPlay) {
                             await _player.openPlayer();
                             await _player.startPlayer(
-                              fromURI: _path,
-                            );
+                                fromURI: _path,
+                                whenFinished: () async {
+                                  await _player.stopPlayer();
+                                  await _player.closePlayer();
+                                  setState(() {
+                                    isPlay = false;
+                                  });
+                                });
                             _player.onProgress!.listen((e) async {
                               var date = DateTime.fromMillisecondsSinceEpoch(
                                 e.position.inMilliseconds,
@@ -205,15 +211,8 @@ class _MainPageState extends State<MainPage> {
                               setState(() {
                                 _time = (date.second * 1000 + date.millisecond) / 1000.0;
                               });
-                              if (_player.playerState == PlayerState.isStopped) {
-                                await _player.stopPlayer();
-                                await _player.closePlayer();
-                                setState(() {
-                                  isPlay = false;
-                                });
-                              }
                             });
-                            _player.setSubscriptionDuration(const Duration(milliseconds: 1));
+                            _player.setSubscriptionDuration(const Duration(milliseconds: 100));
                           } else {
                             await _player.stopPlayer();
                             await _player.closePlayer();

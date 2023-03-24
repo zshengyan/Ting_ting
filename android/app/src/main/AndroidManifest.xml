@@ -15,7 +15,8 @@
     <application
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-        android:label="ting">
+        android:label="ting"
+        android:usesCleartextTraffic="true">
 
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ting/components/PersonalAudio.dart';
 import 'package:ting/components/SearchFriend.dart';
+import 'package:ting/pages/listen_friends_page.dart';
 import 'package:ting/pages/login_page.dart';
 import 'package:ting/pages/main_page.dart';
 import 'package:ting/pages/register_page.dart';
@@ -49,7 +50,7 @@ class MyApp extends StatelessWidget {
               theme: ThemeData(
                 primarySwatch: Colors.blue,
               ),
-              // home: const PersonalAudio(),
+              // home: const ListenPage(),
               home: (!login) ? const LoginPage() : const MainPage(),
             );
           }

@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ting/pages/listen_friends_page.dart';
 
 import '../components/PersonalAudio.dart';
 import '../components/SearchFriend.dart';
@@ -93,6 +94,60 @@ class ApiService {
         return null;
       }
       return response["data"];
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<List<Message>?> getList(int page) async {
+    try {
+      var response = (await dio.get("/message/list?page=$page")).data;
+      if (response["code"] != 10000) {
+        ExceptionDispatcher.dispatcher(response["code"]).alert();
+        return null;
+      }
+      return (response["data"] as List<dynamic>).map((e) => Message.fromJson(e)).toList();
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<bool?> updateLike(String id) async {
+    print("/message/updateLike?id=$id");
+    try {
+      var response = (await dio.get("/message/updateLike?id=$id")).data;
+      if (response["code"] != 10000) {
+        ExceptionDispatcher.dispatcher(response["code"]).alert();
+        return null;
+      }
+      return true;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<bool?> getLikeStatus(String id) async {
+    try {
+      var response = (await dio.get("/message/getLikeStatus?id=$id")).data;
+      if (response["code"] != 10000) {
+        ExceptionDispatcher.dispatcher(response["code"]).alert();
+        return null;
+      }
+      return response["data"]["status"];
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<List<Friend>?> getLikes(String id) async {
+    try {
+      var response = (await dio.get("/message/getLikeList?id=$id")).data;
+      if (response["code"] != 10000) {
+        ExceptionDispatcher.dispatcher(response["code"]).alert();
+        return null;
+      }
+      print(response["data"]);
+      return (response["data"] as List<dynamic>).map((e) => Friend.fromJson(e)).toList();
     } catch (e) {
       return null;
     }

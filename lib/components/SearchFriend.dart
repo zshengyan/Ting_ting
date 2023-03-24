@@ -4,7 +4,6 @@ import 'package:ting/components/FriendColumn.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
 import 'package:ting/model/basic_user_info.dart';
-import 'package:ting/service/NetworkManager.dart';
 import 'package:ting/service/api_service.dart';
 import 'package:ting/service/auth_service.dart';
 
